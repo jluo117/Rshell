@@ -1,18 +1,18 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "echo.h"
-echo::echo(std::vector<std::string> input){
+#include "Echo.h"
+Echo::Echo(std::vector<std::string> input){
     for (int i = 1; i < input.size(); i++){
-        this -> argv.push_back(input.at(i));
+        this -> Argv.push_back(input.at(i));
     }
+    this -> IsValid = true;
 }
 
-bool echo::execute(){
-    std::cout << this -> argv.at(0);
-    for (int i = 1; i < this ->argv.size(); i++){
-        std::cout << ' ' << this -> argv.at(i);
+void Echo::execute(){
+    std::cout << this -> Argv.at(0);
+    for (int i = 1; i < this ->Argv.size(); i++){
+        std::cout << ' ' << this -> Argv.at(i);
     }
     std::cout << std::endl;
-    return true;
 }

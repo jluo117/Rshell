@@ -3,8 +3,9 @@
 #include <string>
 #include <cstring>
 #include <unistd.h>
+#include <set>
 #include <boost/algorithm/string.hpp>
-#include "echo.h"
+#include "Echo.h"
 using namespace boost;
 int main(){
     std::cout << '$';
@@ -12,8 +13,9 @@ int main(){
     std::vector <std::string>argv;
     std::getline(std::cin,userInput);
     split( argv, userInput, is_any_of(" "), token_compress_on );
-    if (argv.at(0)== "echo"){
-    echo *test = new echo(argv);
+    to_lower(argv.at(0));
+    if ((argv.at(0))== "echo"){
+    Echo *test = new Echo(argv);
     test -> execute();
     }
     return 0;

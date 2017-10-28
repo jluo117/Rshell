@@ -3,10 +3,10 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "command.h"
-class echo: protected command{
+#include "Command.h"
+class Echo: protected Command{
     public:
-    echo(std::vector<std::string> input);
-    bool execute();
+    Echo(std::vector<std::string> input);
+    void execute();
 };
 #endif

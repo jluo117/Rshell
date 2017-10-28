@@ -3,10 +3,12 @@
 #include <vector>
 #include <string>
 #include <map>
-class command{
+#include<sys/types.h>
+#include "Base.h"
+class Command: protected Base{
     protected:
-    std::vector<std::string> argv;
+    std::vector<std::string> Argv;
     public:
-    virtual bool execute() = 0;
+    virtual void execute() = 0;
 };
 #endif
