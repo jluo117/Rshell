@@ -5,12 +5,13 @@
 #include <unistd.h>
 #include <set>
 #include <list>
-#include <boost/algorithm/string.hpp>
+//#include <boost/algorithm/string.hpp>
 #include "Echo.h"
 #include "And.h"
-using namespace boost;
-int main(){
-    std::vector<Base*> calls; //collect amount of bases needed to execute
+#include "Mkdir.h"
+//using namespace boost;
+//int main(){
+    /*std::vector<Base*> calls; //collect amount of bases needed to execute
     std::cout << '$';
     std::string userInput;
     std::list <std::string>argv;
@@ -59,4 +60,23 @@ int main(){
     }
     return 0;
 }
+*/
 
+int main(){
+    std::vector<std::string> hello;
+    hello.push_back("hello world");
+    Echo *Hello = new Echo(hello);
+    std::vector<std::string> bye;
+    bye.push_back("bye world");
+    Echo *Bye = new Echo(bye);
+    And *con = new And(Hello);
+    con -> add_right(Bye);
+    con -> execute();
+    std::vector<std::string> makeFile;
+    makeFile.push_back("Hanzo");
+    Mkdir *test1 = new Mkdir(makeFile);
+    Mkdir *test2 = new Mkdir(makeFile);
+    test1 -> execute();
+    test2 -> execute();
+    return 0;
+}

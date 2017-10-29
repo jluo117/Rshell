@@ -15,3 +15,6 @@ void Echo::execute(){
     }
     std::cout << std::endl;
 }
+void Echo::print_error(){
+    
+}

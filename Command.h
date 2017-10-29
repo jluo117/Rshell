@@ -7,8 +7,10 @@
 #include "Base.h"
 class Command: public Base{
     protected:
-    std::vector<std::string> Argv;
+        std::string ErrorCall;
+        std::vector<std::string> Argv;
     public:
-    virtual void execute() = 0;
+        virtual void execute() = 0;
+        virtual void print_error() = 0;
 };
 #endif
