@@ -3,12 +3,11 @@
 #include <string>
 #include "Echo.h"
 Echo::Echo(std::vector<std::string> input){
-    for (int i = 1; i < input.size(); i++){
-        this -> Argv.push_back(input.at(i));
-    }
+    this -> Argv = input;
     this -> IsValid = true;
 }
-
+void Echo::add_right(Base *right){
+}
 void Echo::execute(){
     std::cout << this -> Argv.at(0);
     for (int i = 1; i < this ->Argv.size(); i++){

@@ -1,7 +1,7 @@
 #ifndef CONNECTOR_H
 #define CONNECTOR_H
 #include "Base.h"
-class Connector: protected Base{
+class Connector: public Base{
     protected:
         Base *left;
         Base *right;

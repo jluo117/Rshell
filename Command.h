@@ -5,7 +5,7 @@
 #include <map>
 #include<sys/types.h>
 #include "Base.h"
-class Command: protected Base{
+class Command: public Base{
     protected:
     std::vector<std::string> Argv;
     public:

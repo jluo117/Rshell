@@ -4,9 +4,10 @@
 #include <string>
 #include <map>
 #include "Command.h"
-class Echo: protected Command{
+class Echo: public Command{
     public:
     Echo(std::vector<std::string> input);
+    void add_right(Base *right);
     void execute();
 };
 #endif
