@@ -18,23 +18,30 @@ Mkdir::Mkdir(std::vector<std::string> folders){
             /* Directory exists. */
             this -> IsValid = false;
             this -> ErrorCall = folders.at(i);
+            return;
         }
         this -> Argv.push_back(folders.at(i));
         }
       this -> IsValid = true;
 }
 void Mkdir::execute(){
+    if (this -> IsValid == false){
+        this -> print_error();
+        return;
+    }
     for (int i = 0; i < Argv.size(); i++){
         std::string currentDir = Argv.at(i);
         const char *cstr = currentDir.c_str();
         int stat = ::mkdir(cstr, 0777);
         if (stat == -1){
-            std::cout << "mkdir: " << currentDir << " already exisits" << std::endl;
+            std::cout << "mkdir: " << currentDir << " File exisits" << std::endl;
+            throw(-1);
         }
+
     }
 }
 void Mkdir::print_error(){
-     std::cout << "mkdir: " << this -> ErrorCall << " already exisits" << std::endl;
+     std::cout << "mkdir: " << this -> ErrorCall << " File exisits" << std::endl;
 }
 void Mkdir::add_right(Base *right){
 }

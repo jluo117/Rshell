@@ -16,9 +16,6 @@ void And::add_right(Base *right){
     }
 }
 void And::execute(){
-    if (this -> IsValid == false){
-        return;
-    }
     if ((this -> right == 0) || (this -> left == 0)){
         std::cout << "missing arguemnet" << std::endl;
         return;

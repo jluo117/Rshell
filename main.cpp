@@ -9,6 +9,7 @@
 #include "Echo.h"
 #include "And.h"
 #include "Mkdir.h"
+#include "Ls.h"
 //using namespace boost;
 //int main(){
     /*std::vector<Base*> calls; //collect amount of bases needed to execute
@@ -70,13 +71,12 @@ int main(){
     bye.push_back("bye world");
     Echo *Bye = new Echo(bye);
     And *con = new And(Hello);
-    con -> add_right(Bye);
-    con -> execute();
     std::vector<std::string> makeFile;
     makeFile.push_back("Hanzo");
     Mkdir *test1 = new Mkdir(makeFile);
-    Mkdir *test2 = new Mkdir(makeFile);
-    test1 -> execute();
-    test2 -> execute();
+    con -> add_right(test1);
+    con -> execute();
+    Ls *test3 = new Ls(makeFile);
+    test3 -> execute();
     return 0;
 }
