@@ -1,90 +1,23 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <cstring>
-#include <unistd.h>
-#include <set>
-#include <list>
-//#include <boost/algorithm/string.hpp>
-#include "Echo.h"
+#include "Command.h"
 #include "And.h"
-#include "Mkdir.h"
-#include "Ls.h"
-//using namespace boost;
-//int main(){
-    /*std::vector<Base*> calls; //collect amount of bases needed to execute
-    std::cout << '$';
-    std::string userInput;
-    std::list <std::string>argv;
-    std::vector<std::string> toConvert;
-    std::getline(std::cin,userInput);
-    split( toConvert, userInput, is_any_of(" "), token_compress_on );
-    for (int i = 0; i<toConvert.size(); i++){
-       argv.push_back(toConvert.at(i));
-      }
-    while (argv.size() > 0){
-        std::string holder = *argv.begin();
-        to_lower(holder);
-        if (holder == "echo"){
-            std::vector <std::string> passIn;
-            while (argv.size() > 1 && argv.begin() -> back() != ';'){
-                argv.pop_front();
-                if (argv.front() == "||" || argv.front() == "&&"){
-                    break;
-                }
-                passIn.push_back(argv.front());
-            }
-            Echo *test = new Echo(passIn);
-            if ((calls.size() > 0) && (calls.back()-> IsComplete == false)){
-                calls.back() -> add_right(test);
-            }
-            else{
-                calls.push_back(test);
-            }
-            if (argv.begin() -> back()== ';'){
-                argv.pop_front();
-            }
-        }
-        else if (holder == "&&"){
-            argv.pop_front();
-            if ((calls.size() == 0) || (argv.size() == 0)){
-                std::cout << "Error" << std::endl;
-                return 0;
-            }
-        And *test = new And(calls.back());
-        calls.back() = test;
-    }
-
-    }
-    for (int i = 0; i < calls.size(); i++){
-        calls.at(i) -> execute();
-    }
-    return 0;
-}
-*/
-
+#include "Or.h"
 int main(){
-    std::vector<Base*> calls;
-    std::vector<std::string> hello;
-    hello.push_back("hello world");
-    Echo *Hello = new Echo(hello);
-    std::vector<std::string> bye;
-    bye.push_back("bye world");
-    std::vector<std::string> makeFile;
-    makeFile.push_back("Hanzo");
-    Mkdir *test1 = new Mkdir(makeFile);
-    And *con = new And(test1);
-    con -> add_right(Hello);
-    calls.push_back(con);
-    std::vector<std::string> lsTest;
-    lsTest.push_back("-a");
-    lsTest.push_back("Bob");
-    Ls *test3 = new Ls(lsTest);
-    calls.push_back(test3);
-    for (int i = 0; i < calls.size(); i++){
-        calls.at(i) -> execute();
-    }
-
-
+    std::vector<std::string> userInput;
+    std::vector<std::string> makefiles;
+    userInput.push_back("echo");
+    userInput.push_back("lol");
+    Command *test1 = new Command(userInput);
+    makefiles.push_back("mkdir");
+    makefiles.push_back("beee");
+    Command *test2 = new Command(makefiles);
+    And *andTest = new And(test2);
+    andTest -> add_right(test1);
+    andTest -> execute();
+    Or *orTest = new Or(test2);
+    orTest -> add_right(test1);
+    orTest -> execute();
     return 0;
 }

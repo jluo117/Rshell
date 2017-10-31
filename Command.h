@@ -6,10 +6,9 @@
 #include<sys/types.h>
 #include "Base.h"
 class Command: public Base{
-    protected:
-        std::string ErrorCall;
-        std::vector<std::string> Argv;
+    char *Args[99999];
     public:
-        virtual bool execute() = 0;
+        Command(std::vector<std::string> userEnter);
+        bool execute();
 };
 #endif
