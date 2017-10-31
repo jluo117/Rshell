@@ -12,27 +12,24 @@ Ls::Ls(){
 }
 Ls::Ls(std::vector<std::string> folders){
     for (int i = 0; i < folders.size(); i++){
-        const char *cstr = folders.at(i).c_str();
-        DIR* dir = ::opendir(cstr);
-        if (!dir){
-            this -> IsValid = false;
-            this -> ErrorCall = folders.at(i);
-            return;
-        }
-        else{
             this -> Argv.push_back(folders.at(i));
         }
-    }
     this -> IsValid = true;
 }
 
 void Ls::execute(){
-    char *args[4];
+    char *args[this -> Argv.size() + 2];
 
-    args[0] = "/bin/ls";        // first arg is the full path to the executable
-    args[1] = "-a";
-    args[2] = "Hanzo";    // list of args must be NULL terminated
-    args[3] = NULL;
+    std::string dir = "/bin/ls";        // first arg is the full path to the executable
+    char *cstr = new char[dir.length() + 1];
+    strcpy(cstr, dir.c_str());
+    args[0] = cstr;
+    for (int i = 0; i < this -> Argv.size(); i++){
+        char *arg = new char[this -> Argv.at(i).length() + 1];
+        strcpy(arg, this -> Argv.at(i).c_str());
+        args[i+1] = arg;
+    }
+    args[this -> Argv.size() + 1] = NULL;
         if (execv(args[0],args) == -1){
             throw (-1);
         }

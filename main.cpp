@@ -76,7 +76,10 @@ int main(){
     Mkdir *test1 = new Mkdir(makeFile);
     con -> add_right(test1);
     con -> execute();
-    Ls *test3 = new Ls();
+    std::vector<std::string> lsTest;
+    lsTest.push_back("-a");
+    lsTest.push_back("Bob");
+    Ls *test3 = new Ls(lsTest);
     test3 -> execute();
     return 0;
 }
