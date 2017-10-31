@@ -8,7 +8,6 @@ class Echo: public Command{
     public:
     Echo(std::vector<std::string> input);
     void add_right(Base *right);
-    void execute();
-    void print_error();
+    bool execute();
 };
 #endif

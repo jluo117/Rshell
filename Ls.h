@@ -9,7 +9,6 @@ class Ls:public Command{
     public:
         Ls();
         Ls(std::vector<std::string> folders);
-        void execute();
-        void print_error();
+        bool execute();
 };
 #endif

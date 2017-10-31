@@ -64,22 +64,27 @@
 */
 
 int main(){
+    std::vector<Base*> calls;
     std::vector<std::string> hello;
     hello.push_back("hello world");
     Echo *Hello = new Echo(hello);
     std::vector<std::string> bye;
     bye.push_back("bye world");
-    Echo *Bye = new Echo(bye);
-    And *con = new And(Hello);
     std::vector<std::string> makeFile;
     makeFile.push_back("Hanzo");
     Mkdir *test1 = new Mkdir(makeFile);
-    con -> add_right(test1);
-    con -> execute();
+    And *con = new And(test1);
+    con -> add_right(Hello);
+    calls.push_back(con);
     std::vector<std::string> lsTest;
     lsTest.push_back("-a");
     lsTest.push_back("Bob");
     Ls *test3 = new Ls(lsTest);
-    test3 -> execute();
+    calls.push_back(test3);
+    for (int i = 0; i < calls.size(); i++){
+        calls.at(i) -> execute();
+    }
+
+
     return 0;
 }

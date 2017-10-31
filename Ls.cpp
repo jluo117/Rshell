@@ -8,16 +8,14 @@
 #include<iostream>
 #include "Ls.h"
 Ls::Ls(){
-    this -> IsValid = true;
 }
 Ls::Ls(std::vector<std::string> folders){
     for (int i = 0; i < folders.size(); i++){
             this -> Argv.push_back(folders.at(i));
         }
-    this -> IsValid = true;
 }
 
-void Ls::execute(){
+bool Ls::execute(){
     char *args[this -> Argv.size() + 2];
 
     std::string dir = "/bin/ls";        // first arg is the full path to the executable
@@ -31,12 +29,10 @@ void Ls::execute(){
     }
     args[this -> Argv.size() + 1] = NULL;
         if (execv(args[0],args) == -1){
-            throw (-1);
+            return false;
         }
+        return true;
     }
 
-void Ls::print_error(){
-    std::cout << "ls: " << this -> ErrorCall << ": No such file or directory" << std::endl;
-}
 void Ls::add_right(Base *right){
 }

@@ -6,6 +6,6 @@ class Connector: public Base{
         Base *left;
         Base *right;
     public:
-        virtual void execute() = 0;
+        virtual bool execute() = 0;
 };
 #endif

@@ -10,7 +10,6 @@ class Command: public Base{
         std::string ErrorCall;
         std::vector<std::string> Argv;
     public:
-        virtual void execute() = 0;
-        virtual void print_error() = 0;
+        virtual bool execute() = 0;
 };
 #endif

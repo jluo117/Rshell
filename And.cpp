@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <iostream>
 #include "And.h"
 And::And(Base *left){
@@ -8,28 +9,20 @@ And::And(Base *left){
 void And::add_right(Base *right){
     this -> right = right;
     this -> IsComplete = true;
-    if ((this -> right -> IsValid) && (this -> left -> IsValid)){
-        this -> IsValid = true;
-    }
-    else{
-        this -> IsValid = false;
-    }
 }
-void And::execute(){
+bool And::execute(){
     if ((this -> right == 0) || (this -> left == 0)){
         std::cout << "missing arguemnet" << std::endl;
-        return;
+        return false;
     }
-    try{
-        this -> left -> execute();
-    }
-    catch(int i){
-        return;
-    }
-    try{
-        this -> right -> execute();
-    }
-    catch(int i){
-        return;
-    }
+
+        if(this -> left -> execute()){
+            this -> right -> execute();
+         }
+        else{
+            return false;
+        }
+        return true;
+
 }
+

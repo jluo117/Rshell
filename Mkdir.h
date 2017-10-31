@@ -8,7 +8,6 @@ class Mkdir :public Command{
         void add_right(Base *right);
     public:
         Mkdir(std::vector<std::string> folders);
-        void execute();
-        void print_error();
+        bool execute();
 };
 #endif
