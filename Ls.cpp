@@ -27,31 +27,16 @@ Ls::Ls(std::vector<std::string> folders){
 }
 
 void Ls::execute(){
-    if (this -> Argv.size() == 0){
-	int status;
-    char *args[2];
+    char *args[4];
 
     args[0] = "/bin/ls";        // first arg is the full path to the executable
-    args[1] = NULL;             // list of args must be NULL terminated
-
-    if ( fork() == 0 )
-        execv( args[0], args ); // child: call execv with the path and the args
-    else{
-        wait( &status );        // parent: wait for the child (not really necessary)
-    }
-    }
-    else{
-        for (int i = 0; i < Argv.size(); i++){
-            const char *cstr = this ->Argv.at(i).c_str();
-            DIR* dir = ::opendir(cstr);
-            if (!dir){
-                std::cout << "ls: " << this -> Argv.at(i) <<": No such file or directory" <<std::endl;
-                throw(-1);
-            }
-        execvp(((char *)"ls",cstr), 0);
+    args[1] = "-a";
+    args[2] = "Hanzo";    // list of args must be NULL terminated
+    args[3] = NULL;
+        if (execv(args[0],args) == -1){
+            throw (-1);
         }
     }
-}
 
 void Ls::print_error(){
     std::cout << "ls: " << this -> ErrorCall << ": No such file or directory" << std::endl;

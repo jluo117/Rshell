@@ -76,7 +76,7 @@ int main(){
     Mkdir *test1 = new Mkdir(makeFile);
     con -> add_right(test1);
     con -> execute();
-    Ls *test3 = new Ls(makeFile);
+    Ls *test3 = new Ls();
     test3 -> execute();
     return 0;
 }
