@@ -1,14 +1,19 @@
 #include <unistd.h>
 #include <iostream>
 #include "And.h"
+And::And(){
+    this -> left = 0;
+    this -> right = 0;
+}
 And::And(Base *left){
     this -> left = left;
     this -> right = 0;
-    this -> IsComplete = false;
+}
+void And::add_left(Base *left){
+    this -> left = left;
 }
 void And::add_right(Base *right){
     this -> right = right;
-    this -> IsComplete = true;
 }
 bool And::execute(){
     if ((this -> right == 0) || (this -> left == 0)){
