@@ -7,6 +7,7 @@
 #include "Command.h"
 #include <unistd.h>
 Command::Command(std::vector<std::string> userEnter){
+    this -> IsConnector = false;
     this -> left = this;
     this -> right= this;
     for (int i = 0; i < userEnter.size(); i++){
@@ -29,14 +30,17 @@ bool Command::execute(){
     }
     }
     if (child_pid > 0){
-    if ( wait(0) != -1){
+    if ( wait(0) == -1){
     return false;
     }
+
+
     else{
         return true;
     }
-    }
     return false;
+}
+return false;
 }
 void Command::add_left(Base* none){
 }

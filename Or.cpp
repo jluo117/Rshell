@@ -1,10 +1,12 @@
 #include <iostream>
 #include "Or.h"
 Or::Or(){
+    this -> IsConnector = true;
     this -> left = 0;
     this -> right = 0;
 }
 Or::Or(Base *left){
+    this -> IsConnector = true;
     this -> left = left;
     this -> right = 0;
 }

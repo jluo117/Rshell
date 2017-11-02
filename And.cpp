@@ -2,10 +2,12 @@
 #include <iostream>
 #include "And.h"
 And::And(){
+    this -> IsConnector = true;
     this -> left = 0;
     this -> right = 0;
 }
 And::And(Base *left){
+    this -> IsConnector = true;
     this -> left = left;
     this -> right = 0;
 }
@@ -22,12 +24,16 @@ bool And::execute(){
     }
 
         if(this -> left -> execute()){
-            this -> right -> execute();
+            if (this -> right -> execute()){
+                return true;
+            }
+            else{
+                return false;
+            }
          }
         else{
             return false;
         }
-        return true;
 
 }
 
