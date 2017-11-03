@@ -1,7 +1,9 @@
 CC = g++
 CC_FLAGS = -Wall -Werror -ansi -pedantic -std=c++11
 EXEC = test.out
-SOURCES = $(wildcard *.cpp)
+SOURCEDIR = src/
+
+SOURCES = $(wildcard $(SOURCEDIR)/*.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 
 $(EXEC): $(OBJECTS)
