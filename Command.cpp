@@ -19,11 +19,16 @@ Command::Command(std::vector<std::string> userEnter){
     }
 }
 
+void Command::fetchName(){
+}
 void Command::execute(int &status){
 
     std::string exitCheck = this -> Args[0];
     if (exitCheck == "exit"){
     exit(0);
+    }
+    if (exitCheck == ";"){
+        return;
     }
     int pid = fork();
 	//child fuction is running
@@ -39,7 +44,6 @@ void Command::execute(int &status){
 		perror("wait");
         }
     }
-    std::cout << status << std::endl;
 }
 void Command::add_left(Base* none){
 }

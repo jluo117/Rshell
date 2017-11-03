@@ -6,6 +6,7 @@
 #include<sys/types.h>
 #include "Base.h"
 class Command: public Base{
+    void fetchName();
     void add_left(Base*);
     void add_right(Base*);
     char *Args[99999];

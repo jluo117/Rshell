@@ -33,23 +33,27 @@ void Shell::runShell(){
         int connectorCount = 0;
         for(Tok::iterator beg = tok.begin(); beg != tok.end(); ++beg){
         //std::cout << *beg << std::endl;
-	    
-	    
+
+
 	    if (*beg == "||") {
+                if (passInArg.size() > 0){
                 Command* newBase = new Command(passInArg);
                 passInArg.clear();
-                Or *newOr = new Or();
                 userInputs.push_back(newBase);
+                }
+                Or *newOr = new Or();
                 userInputs.push_back(newOr);
                 connectorCount++;
                 continue;
             }
             if (*beg == "&&"){
                // printVector(passInArg);
+                if (passInArg.size() > 0){
                 Command* newBase = new Command(passInArg);
-                passInArg.clear();
-                And *newAnd = new And();
                 userInputs.push_back(newBase);
+                passInArg.clear();
+                }
+                And *newAnd = new And();
                 userInputs.push_back(newAnd);
                 connectorCount++;
                 continue;
@@ -67,7 +71,7 @@ void Shell::runShell(){
                 continue;
             }
         }
-        if (passInArg.size() == 0){
+        if (passInArg.size() == 0 && userInputs.size() == 0){
         }
         else{
         Command* newBase = new Command(passInArg);
@@ -79,13 +83,48 @@ void Shell::runShell(){
         userInputs.clear();
         passInArg.clear();
         }
-        for (unsigned i = 0; i < toBreak.size(); i++){
+
+
+
+        for (int i = 0; i < toBreak.size(); i++){
             if (toBreak.at(i).first.size() == 0){
                 continue;
             }
-            else{
-            userCall.push_back(splitBuild(toBreak.at(i).first,toBreak.at(i).second));
+            std::vector<Base*> userVec = toBreak.at(i).first;
+            for (int j = 0; j < userVec.size(); j++){
+                if (userVec.at(j) -> IsConnector){
+                    if (j == 0){
+                        flag = -1;
+                        userVec.at(j) ->fetchName();
+                        break;
+                    }
+                    if (j == userVec.size() -1){
+                        flag = -1;
+                        userVec.at(j) ->fetchName();
+                        break;
+                    }
+                    if (userVec.at(j - 1) -> IsConnector){
+                        flag = -1;
+                        userVec.at(j) ->fetchName();
+                        break;
+                    }
+                    if (userVec.at(j + 1) -> IsConnector){
+                            flag = -1;
+                            userVec.at(j) ->fetchName();
+                            break;
+                    }
+                }
             }
+            if (flag != -1){
+                userCall.push_back(splitBuild(userVec,toBreak.at(i).second,flag));
+            }
+                if  (flag == -1){
+                break;
+            }
+
+        }
+        if (flag == -1){
+           continue;
         }
         for (unsigned i = 0; i <userCall.size(); i++){
             flag = 0;
@@ -101,9 +140,10 @@ void printVector(std::vector<std::string> test){
     std::cout << std::endl;
 }
 
-Base* Shell::splitBuild(std::vector<Base*> &userInputs,int connectorCount){
-        //std::cout << userInputs.size() << std::endl;
-        //std::cout <<"looping" << std::endl;
+Base* Shell::splitBuild(std::vector<Base*> &userInputs,int connectorCount,int &flag){
+        if (flag == -1){
+            return userInputs.at(0);
+        }
         int q = userInputs.size();
         int leftConnector = 0;
         int rightConnector = 0;
@@ -131,24 +171,19 @@ Base* Shell::splitBuild(std::vector<Base*> &userInputs,int connectorCount){
                 rightConnector++;
             }
         }
-        Base* leftSpliters = splitBuild(leftSplit,leftConnector);
-        Base* rightSpliters = splitBuild(rightSplit,rightConnector);
-
-        return build(leftSpliters,rightSpliters);
+        Base* leftSpliters = splitBuild(leftSplit,leftConnector,flag);
+        Base* rightSpliters = splitBuild(rightSplit,rightConnector,flag);
+        return build(leftSpliters,rightSpliters,flag);
 
 }
 
-Base* Shell::build(Base* left, Base* right){
+Base* Shell::build(Base* left, Base* right,int &flag){
     if (left -> right == 0){
-        //std::cout << "building right "<< std::endl;
         left -> add_right(right);
-        //left -> execute();
         return left;
     }
     else if (right -> left == 0){
-        //std::cout << "building left" << std::endl;
         right -> add_left(left);
-        //right -> execute();
         return right;
     }
     else if (left -> left == 0){
@@ -160,4 +195,3 @@ Base* Shell::build(Base* left, Base* right){
     std::cout << "parsing error" << std::endl;
     return right;
 }
-
