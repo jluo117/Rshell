@@ -23,40 +23,35 @@ void Shell::runShell(){
         typedef tokenizer<char_separator<char> > Tok;
         char_separator<char> sep(" "); // default constructed
 
-	for (unsigned i = 0; i < UserInput.size(); i++){
-	    if (UserInput.at(i) == '#') {
-		UserInput = UserInput.substr(0, i);
+	    for (unsigned i = 0; i < UserInput.size(); i++){
+	        if (UserInput.at(i) == '#') {
+		    UserInput = UserInput.substr(0, i);
+	        }
 	    }
-	}
-
         Tok tok(UserInput, sep);
         int connectorCount = 0;
         for(Tok::iterator beg = tok.begin(); beg != tok.end(); ++beg){
-        //std::cout << *beg << std::endl;
-
-
 	    if (*beg == "||") {
-                if (passInArg.size() > 0){
+           if (passInArg.size() > 0){
                 Command* newBase = new Command(passInArg);
                 passInArg.clear();
                 userInputs.push_back(newBase);
-                }
-                Or *newOr = new Or();
-                userInputs.push_back(newOr);
-                connectorCount++;
-                continue;
+           }
+           Or *newOr = new Or();
+           userInputs.push_back(newOr);
+           connectorCount++;
+           continue;
+        }
+        if (*beg == "&&"){
+            if (passInArg.size() > 0){
+                Command* newBase = new Command(passInArg);
+                userInputs.push_back(newBase);
+                passInArg.clear();
             }
-            if (*beg == "&&"){
-               // printVector(passInArg);
-                if (passInArg.size() > 0){
-                Command* newBase = new Command(passInArg);
-                userInputs.push_back(newBase);
-                passInArg.clear();
-                }
-                And *newAnd = new And();
-                userInputs.push_back(newAnd);
-                connectorCount++;
-                continue;
+            And *newAnd = new And();
+            userInputs.push_back(newAnd);
+            connectorCount++;
+            continue;
             }
             passInArg.push_back(*beg);
             if (beg -> back() == ';'){
@@ -74,18 +69,15 @@ void Shell::runShell(){
         if (passInArg.size() == 0 && userInputs.size() == 0){
         }
         else{
-        Command* newBase = new Command(passInArg);
-        userInputs.push_back(newBase);
-        std::pair<std::vector<Base*> , int> theCommand;
-        theCommand = std::make_pair(userInputs,connectorCount);
-        connectorCount = 0;
-        toBreak.push_back(theCommand);
-        userInputs.clear();
-        passInArg.clear();
+            Command* newBase = new Command(passInArg);
+            userInputs.push_back(newBase);
+            std::pair<std::vector<Base*> , int> theCommand;
+            theCommand = std::make_pair(userInputs,connectorCount);
+            connectorCount = 0;
+            toBreak.push_back(theCommand);
+            userInputs.clear();
+            passInArg.clear();
         }
-
-
-
         for (int i = 0; i < toBreak.size(); i++){
             if (toBreak.at(i).first.size() == 0){
                 continue;
