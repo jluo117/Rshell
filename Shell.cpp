@@ -178,20 +178,13 @@ Base* Shell::splitBuild(std::vector<Base*> &userInputs,int connectorCount,int &f
 }
 
 Base* Shell::build(Base* left, Base* right,int &flag){
-    if (left -> right == 0){
-        left -> add_right(right);
-        return left;
-    }
-    else if (right -> left == 0){
+    if (right -> IsConnector){
         right -> add_left(left);
         return right;
     }
-    else if (left -> left == 0){
+    else{
+        left ->add_right(right);
         return left;
     }
-    else if (right -> right == 0){
-        return  right;
-    }
-    std::cout << "parsing error" << std::endl;
-    return right;
 }
+
