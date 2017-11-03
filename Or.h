@@ -7,7 +7,7 @@ class Or: public Connector{
         Or(Base *left);
         void add_right(Base *right);
         void add_left(Base *left);
-        bool execute();
+        void  execute(int &status);
 };
 
 #endif

@@ -11,6 +11,6 @@ class Command: public Base{
     char *Args[99999];
     public:
         Command(std::vector<std::string> userEnter);
-        bool execute();
+        void execute(int &status);
 };
 #endif

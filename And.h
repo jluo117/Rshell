@@ -7,6 +7,6 @@ class And :public Connector{
     And(Base *left);
     void add_left(Base *left);
     void add_right(Base *right);
-    bool execute();
+    void execute(int &status);
 };
 #endif

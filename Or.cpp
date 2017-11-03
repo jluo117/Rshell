@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Or.h"
 Or::Or(){
+    this -> IsConnector = true;
     this -> left = 0;
     this -> right = 0;
 }
@@ -14,20 +15,23 @@ void Or::add_right(Base *right){
 void Or::add_left(Base *left){
     this -> left = left;
 }
-bool Or::execute(){
-   if ((this -> right == 0) || (this -> left == 0)){
+void Or::execute(int &status){
+    int opt = 0;
+    if ((this -> right == 0) || (this -> left == 0)){
        std::cout << "missing arguement" << std::endl;
-       return false;
+       status = -1;
+       return;
    }
-    if (this -> left -> execute()){
-        return true;
+    this -> left -> execute(opt);
+    if (opt != 0){
+        opt = 0;
+        this -> right -> execute(opt);
+        status = opt;
+        return;
     }
-    else{
-       if (this -> right -> execute()){
-          return true;
-       }
-       else{
-          return false;
-       }
-}
+    else if (opt == 0){
+        status = 0;
+        return;
+    }
+
 }

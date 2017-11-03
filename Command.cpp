@@ -3,10 +3,12 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdlib.h>
+#include <iostream>
 #include <stdio.h>
 #include "Command.h"
 #include <unistd.h>
 Command::Command(std::vector<std::string> userEnter){
+    this -> IsConnector = false;
     this -> left = this;
     this -> right= this;
     for (int i = 0; i < userEnter.size(); i++){
@@ -16,27 +18,27 @@ Command::Command(std::vector<std::string> userEnter){
     }
 }
 
-bool Command::execute(){
+void Command::execute(int &status){
+
     std::string exitCheck = this -> Args[0];
     if (exitCheck == "exit"){
     exit(0);
     }
-    pid_t child_pid;
-    child_pid = fork();
-    if (child_pid == 0){
-    if(execvp(this -> Args[0],this -> Args) == -1){
-        perror("exec");
+    int pid = fork();
+	//child fuction is running
+    if (pid == 0){
+		status=execvp(this-> Args[0],this -> Args);
+        perror("execvp");
     }
+	else if(pid==-1){
+		perror("execvp");
+		exit(status);
+	}else{
+		if(wait(&status) == -1){
+		perror("wait");
+        }
     }
-    if (child_pid > 0){
-    if ( wait(0) != -1){
-    return false;
-    }
-    else{
-        return true;
-    }
-    }
-    return false;
+    std::cout << status << std::endl;
 }
 void Command::add_left(Base* none){
 }

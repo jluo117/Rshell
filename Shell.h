@@ -8,7 +8,7 @@
 class Shell{
     private:
         Base* build(Base*,Base*);
-        Base* splitBuild(std::vector<Base*> &userInputs);
+        Base* splitBuild(std::vector<Base*> &userInputs,int connectorCount);
     public:
         Shell();
         void runShell();
