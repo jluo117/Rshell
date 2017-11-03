@@ -5,13 +5,14 @@
 #include <stdlib.h>
 #include <iostream>
 #include <stdio.h>
+#include <string.h>
 #include "Command.h"
 #include <unistd.h>
 Command::Command(std::vector<std::string> userEnter){
     this -> IsConnector = false;
     this -> left = this;
     this -> right= this;
-    for (int i = 0; i < userEnter.size(); i++){
+    for (unsigned i = 0; i < userEnter.size(); i++){
         char *cstr = new char[userEnter.at(i).size() + 1];
         strcpy(cstr, userEnter.at(i).c_str());
         this -> Args[i] = cstr;

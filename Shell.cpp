@@ -22,11 +22,20 @@ void Shell::runShell(){
         std::vector<std::string> passInArg;
         typedef tokenizer<char_separator<char> > Tok;
         char_separator<char> sep(" "); // default constructed
+
+	for (unsigned i = 0; i < UserInput.size(); i++){
+	    if (UserInput.at(i) == '#') {
+		UserInput = UserInput.substr(0, i);
+	    }
+	}
+
         Tok tok(UserInput, sep);
         int connectorCount = 0;
         for(Tok::iterator beg = tok.begin(); beg != tok.end(); ++beg){
         //std::cout << *beg << std::endl;
-            if (*beg == "||") {
+	    
+	    
+	    if (*beg == "||") {
                 Command* newBase = new Command(passInArg);
                 passInArg.clear();
                 Or *newOr = new Or();
@@ -70,7 +79,7 @@ void Shell::runShell(){
         userInputs.clear();
         passInArg.clear();
         }
-        for (int i = 0; i < toBreak.size(); i++){
+        for (unsigned i = 0; i < toBreak.size(); i++){
             if (toBreak.at(i).first.size() == 0){
                 continue;
             }
@@ -78,7 +87,7 @@ void Shell::runShell(){
             userCall.push_back(splitBuild(toBreak.at(i).first,toBreak.at(i).second));
             }
         }
-        for (int i = 0; i <userCall.size(); i++){
+        for (unsigned i = 0; i <userCall.size(); i++){
             flag = 0;
             userCall.at(i) -> execute(flag);
 
@@ -86,7 +95,7 @@ void Shell::runShell(){
     }
 }
 void printVector(std::vector<std::string> test){
-    for (int i = 0; i < test.size(); i++){
+    for (unsigned i = 0; i < test.size(); i++){
         std::cout << test.at(i) << ' ';
     }
     std::cout << std::endl;
@@ -116,7 +125,7 @@ Base* Shell::splitBuild(std::vector<Base*> &userInputs,int connectorCount){
                   leftConnector++;
               }
         }
-        for (int i = q  ; i < userInputs.size(); i++){
+        for (unsigned i = q  ; i < userInputs.size(); i++){
             rightSplit.push_back(userInputs.at(i));
             if (userInputs.at(i) -> IsConnector){
                 rightConnector++;
