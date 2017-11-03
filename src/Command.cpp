@@ -12,6 +12,10 @@ Command::Command(std::vector<std::string> userEnter){
     this -> IsConnector = false;
     this -> left = this;
     this -> right= this;
+    if (userEnter.at(0).back() == ';'){
+        userEnter.at(0) = userEnter.at(0).substr(0,userEnter.at(0).size() -1);
+    }
+
     for (unsigned i = 0; i < userEnter.size(); i++){
         char *cstr = new char[userEnter.at(i).size() + 1];
         strcpy(cstr, userEnter.at(i).c_str());
