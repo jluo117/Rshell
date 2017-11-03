@@ -1,12 +1,16 @@
-CFLAGS=-Wall -Werror -ansi -pedantic
-EXEC=rshell
-FINEXEC=bin/rshell
-all:rshell
-	mkdir -p bin
-	mv $(EXEC) $(FINEXEC)
+CC = g++
+CC_FLAGS = -Wall -Werror -ansi -pedantic -std=c++11
+EXEC = test.out
+SOURCEDIR = src/
 
-rshell:
-	g++ $(CFLAGS) src/*.cpp -o $(EXEC)
+SOURCES = $(wildcard $(SOURCEDIR)/*.cpp)
+OBJECTS = $(SOURCES:.cpp=.o)
+
+$(EXEC): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $(EXEC)
+
+%.o: %.cpp
+	$(CC) -c -g $(CC_FLAGS) $< -o $@
 
 clean:
-	rm -r -f bin
+	rm -f $(EXEC) $(OBJECTS)
