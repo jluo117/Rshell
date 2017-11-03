@@ -9,6 +9,9 @@ Or::Or(Base *left){
     this -> left = left;
     this -> right = 0;
 }
+void Or::fetchName(){
+    std::cout << "parse error near " << "'||'" << std::endl;
+}
 void Or::add_right(Base *right){
     this -> right = right;
 }

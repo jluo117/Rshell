@@ -17,6 +17,9 @@ void And::add_left(Base *left){
 void And::add_right(Base *right){
     this -> right = right;
 }
+void And::fetchName(){
+    std::cout<< "parse error near " << "'&&'" << std::endl;
+}
 void And::execute(int &status){
     if ((this -> right == 0) || (this -> left == 0)){
         std::cout << "missing arguemnet" << std::endl;
