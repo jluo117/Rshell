@@ -1,0 +1,4 @@
+ls
+echo you are being zip bombed
+echo "||"
+exit

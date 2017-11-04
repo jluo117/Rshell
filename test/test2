@@ -1,0 +1,2 @@
+echo hello && mkdir bobTheLoser && rm -rf bobTheLoser || echo fail && echo SKT will win;
+exit

@@ -1,0 +1,6 @@
+ls -a
+ls World of WarCraft || echo I want a job at Blizzard
+curl http://jluo117.github.io/
+open http://jluo117.github.io/ && open https://www.youtube.com/watch?v=Y6ljFaKRTrI
+exit
+
