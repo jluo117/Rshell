@@ -3,6 +3,7 @@
 class Base{
     public:
         bool IsConnector;
+        virtual ~Base();
         Base *left;
         Base *right;
         virtual void fetchName ()=0;

@@ -6,6 +6,7 @@
 #include<sys/types.h>
 #include "Base.h"
 class Command: public Base{
+    ~Command();
     void fetchName();
     void add_left(Base*);
     void add_right(Base*);

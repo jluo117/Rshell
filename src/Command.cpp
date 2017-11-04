@@ -22,7 +22,8 @@ Command::Command(std::vector<std::string> userEnter){
         this -> Args[i] = cstr;
     }
 }
-
+Command::~Command(){
+}
 void Command::fetchName(){
 }
 void Command::execute(int &status){

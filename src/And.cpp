@@ -11,6 +11,8 @@ And::And(Base *left){
     this -> left = left;
     this -> right = 0;
 }
+And::~And(){
+}
 void And::add_left(Base *left){
     this -> left = left;
 }
@@ -29,15 +31,21 @@ void And::execute(int &status){
         int curState = 0;
         this -> left -> execute(curState);
         if (curState != -0){
+            delete this -> right;
+            delete this -> left;
             status = -1;
             return;
         }
         this -> right -> execute(curState);
         if (curState != 0){
+            delete this -> right;
+            delete this -> left;
             status = -1;
             return;
         }
         status = 0;
+        delete this -> right;
+        delete this -> left;
         return;
 }
 
