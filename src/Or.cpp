@@ -13,6 +13,7 @@ Or::~Or(){
     delete this -> right;
     delete this -> left;
 }
+//error call
 void Or::fetchName(){
     std::cout << "parse error near " << "'||'" << std::endl;
 }
@@ -31,7 +32,7 @@ void Or::execute(int &status){
    }
     this -> left -> execute(opt);
     if(opt == -999){
-        status = -999;
+        status = -999; //used for force exit
         exit(0);
     }
     if (opt != 0){

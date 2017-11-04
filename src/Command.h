@@ -11,7 +11,7 @@ class Command: public Base{
     void add_left(Base*);
     void add_right(Base*);
     char *Args[200];
-    int toBlowUp;
+    int toBlowUp; //check amount of deletes we need
     public:
         Command(std::vector<std::string> userEnter);
         void execute(int &status);

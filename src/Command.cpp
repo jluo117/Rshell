@@ -15,7 +15,7 @@ Command::Command(std::vector<std::string> userEnter){
     if (userEnter.at(0).back() == ';'){
         userEnter.at(0) = userEnter.at(0).substr(0,userEnter.at(0).size() -1);
     }
-
+    //casting string to char
     for (unsigned i = 0; i < userEnter.size(); i++){
         char *cstr = new char[userEnter.at(i).size() + 1];
         strcpy(cstr, userEnter.at(i).c_str());
@@ -28,6 +28,7 @@ Command::~Command(){
        delete this -> Args[i];
     }
 }
+//connector only function
 void Command::fetchName(){
 }
 void Command::execute(int &status){
@@ -58,6 +59,7 @@ void Command::execute(int &status){
         }
     }
 }
+//connection only function
 void Command::add_left(Base* none){
 }
 void Command::add_right(Base* none){
