@@ -7,8 +7,8 @@
 #include "Command.h"
 class Shell{
     private:
-        Base* build(Base*,Base*,int &flag);
-        Base* splitBuild(std::vector<Base*> &userInputs,int connectorCount,int &flag);
+        Base* build(Base*,Base*);
+        Base* splitBuild(std::vector<Base*> &userInputs,int connectorCount);
     public:
         Shell();
         void runShell();

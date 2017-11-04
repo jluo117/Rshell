@@ -1,6 +1,6 @@
 CC = g++
 CC_FLAGS = -Wall -Werror -ansi -pedantic -std=c++11
-EXEC = test.out
+EXEC = rshell.out
 SOURCEDIR = src/
 
 SOURCES = $(wildcard $(SOURCEDIR)/*.cpp)
