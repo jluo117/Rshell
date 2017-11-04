@@ -9,6 +9,10 @@ Or::Or(Base *left){
     this -> left = left;
     this -> right = 0;
 }
+Or::~Or(){
+    delete this -> right;
+    delete this -> left;
+}
 void Or::fetchName(){
     std::cout << "parse error near " << "'||'" << std::endl;
 }
@@ -26,6 +30,10 @@ void Or::execute(int &status){
        return;
    }
     this -> left -> execute(opt);
+    if(opt == -999){
+        status = -999;
+        exit(0);
+    }
     if (opt != 0){
         opt = 0;
         this -> right -> execute(opt);

@@ -20,16 +20,25 @@ Command::Command(std::vector<std::string> userEnter){
         char *cstr = new char[userEnter.at(i).size() + 1];
         strcpy(cstr, userEnter.at(i).c_str());
         this -> Args[i] = cstr;
+        this -> toBlowUp++;
     }
 }
-
+Command::~Command(){
+    for (int i = 0; i < toBlowUp; i++){
+       delete this -> Args[i];
+    }
+}
 void Command::fetchName(){
 }
 void Command::execute(int &status){
 
     std::string exitCheck = this -> Args[0];
     if (exitCheck == "exit"){
-    exit(0);
+    while(1){
+        status = -999;
+        exit(0);
+        return;
+    }
     }
     if (exitCheck == ";"){
         return;

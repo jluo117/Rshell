@@ -32,7 +32,6 @@ void Shell::runShell(){
         Tok tok(UserInput, sep);
         int connectorCount = 0;
         for(Tok::iterator beg = tok.begin(); beg != tok.end(); ++beg){
-        //std::cout << *beg << std::endl;
 
 
 	    if (*beg == "||") {
@@ -47,7 +46,6 @@ void Shell::runShell(){
                 continue;
             }
             if (*beg == "&&"){
-               // printVector(passInArg);
                 if (passInArg.size() > 0){
                 Command* newBase = new Command(passInArg);
                 userInputs.push_back(newBase);
@@ -83,7 +81,7 @@ void Shell::runShell(){
         toBreak.push_back(theCommand);
         userInputs.clear();
         passInArg.clear();
-        
+
 
 
 
@@ -130,15 +128,12 @@ void Shell::runShell(){
         for (unsigned i = 0; i <userCall.size(); i++){
             flag = 0;
             userCall.at(i) -> execute(flag);
-
+            delete userCall.at(i);
+            if (flag == -999){
+                exit(0);
+            }
     }
     }
-}
-void printVector(std::vector<std::string> test){
-    for (unsigned i = 0; i < test.size(); i++){
-        std::cout << test.at(i) << ' ';
-    }
-    std::cout << std::endl;
 }
 
 Base* Shell::splitBuild(std::vector<Base*> &userInputs,int connectorCount){
@@ -150,7 +145,7 @@ Base* Shell::splitBuild(std::vector<Base*> &userInputs,int connectorCount){
     for (int i = 0 ; i < q -2; i++){
         leftSplit.push_back(userInputs.at(i));
     }
-    
+
     Base* leftSpliters = splitBuild(leftSplit,connectorCount);
     Base* rightSpliters = userInputs.at(q-2);
     rightSpliters->add_right(userInputs.at(q-1));

@@ -5,6 +5,7 @@ class Or: public Connector{
     public:
         Or();
         Or(Base *left);
+        ~Or();
         void fetchName ();
         void add_right(Base *right);
         void add_left(Base *left);

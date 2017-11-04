@@ -2,6 +2,7 @@
 #define BASE_H
 class Base{
     public:
+        virtual ~Base(){}
         bool IsConnector;
         Base *left;
         Base *right;

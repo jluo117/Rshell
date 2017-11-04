@@ -5,6 +5,7 @@ class And :public Connector{
     public:
     And();
     And(Base *left);
+    ~And();
     void fetchName ();
     void add_left(Base *left);
     void add_right(Base *right);
