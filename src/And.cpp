@@ -32,10 +32,6 @@ void And::execute(int &status){
     }
         int curState = 0;
         this -> left -> execute(curState);
-        if (curState == -999){
-            status = -999;
-            exit(0);
-        }
         if (curState != -0){
             status = -1;
             return;

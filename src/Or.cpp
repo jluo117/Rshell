@@ -31,10 +31,6 @@ void Or::execute(int &status){
        return;
    }
     this -> left -> execute(opt);
-    if(opt == -999){
-        status = -999; //used for force exit
-        exit(0);
-    }
     if (opt != 0){
         opt = 0;
         this -> right -> execute(opt);

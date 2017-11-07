@@ -36,9 +36,7 @@ void Command::execute(int &status){
     std::string exitCheck = this -> Args[0];
     if (exitCheck == "exit"){
     while(1){
-        status = -999;
         exit(0);
-        return;
     }
     }
     if (exitCheck == ";"){
@@ -49,6 +47,7 @@ void Command::execute(int &status){
     if (pid == 0){
 		status=execvp(this-> Args[0],this -> Args);
         perror("execvp");
+        exit(status);
     }
 	else if(pid==-1){
 		perror("execvp");
