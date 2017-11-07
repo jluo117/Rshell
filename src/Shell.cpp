@@ -112,9 +112,6 @@ void Shell::runShell(){
         flag = 0;
         userCall.at(i) -> execute(flag);
         delete userCall.at(i);
-        if (flag == -999){
-            exit(0);
-        }
     }
     }
 }
