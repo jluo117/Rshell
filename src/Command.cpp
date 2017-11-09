@@ -2,6 +2,7 @@
 #include <string>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include <stdlib.h>
 #include <iostream>
 #include <stdio.h>
@@ -33,15 +34,68 @@ void Command::fetchName(){
 }
 void Command::execute(int &status){
 
-    std::string exitCheck = this -> Args[0];
-    if (exitCheck == "exit"){
+    std::string CommandCheck = this -> Args[0];
+    if (CommandCheck == "exit"){
     while(1){
         exit(0);
     }
     }
-    if (exitCheck == ";"){
+    if (CommandCheck == ";"){
         return;
     }
+    else if (CommandCheck == "test"){
+        std::string Flag;
+        std::string File;
+        if (this -> toBlowUp > 2){
+            flag = this -> Args[1];
+            File = this -> Args[2];
+        }
+        else{
+           flag = "-e";
+           File = this -> Args[1];
+        }
+
+        if (flag == "-e"){
+            std::ifstream f(File);
+            if (f.good()){
+                status = 0;
+                return;
+            }
+            DIR* dir = opendir(File);
+            else if (dir){
+                status = 0;
+                return;
+            }
+            else{
+                status = -1;
+                return;
+            }
+        }
+        if (flag == "-f"){
+            std::ifstream f(File);
+            if (f.good()){
+                status = 0;
+                return;
+            }
+            else{
+                status = -1;
+            }
+        }
+        if (flag == "-d"){
+           DIR* dir = opendir(File);
+           if (dir){
+               status = 0;
+               return;
+           }
+           else{
+               status = -1;
+               return;
+           }
+        }
+        status = -1;
+        return;
+    }
+
     int pid = fork();
 	//child fuction is running
     if (pid == 0){
