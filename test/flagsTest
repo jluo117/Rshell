@@ -1,0 +1,9 @@
+echo testing test with flags
+echo expecting (False): ; test abc/def/ghi
+mkdir -p abc/def/ghi; echo expecting (True): ; test abc/def/ghi
+cd abc; touch samplefile; cd ..
+echo testing -f flag, expecting (True); [ -f abc/samplefile ]
+echo testing -d flag, expecting (True); test -d abc/def
+cd abc; rm samplefile; cd ..
+exit
+
