@@ -1,0 +1,5 @@
+echo testing bracket test
+echo expecting (False): ; [ -e test1/test2/test3 ]
+mkdir -p test1/test2/test3
+echo ecpecting (True): ; [ -e test1/test2/test3 ]
+rmdir -p test1/test2/test3; exit

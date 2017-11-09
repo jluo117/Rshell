@@ -1,0 +1,4 @@
+echo testing test with connectors
+echo expecting (False) and path DNE; test -e aa/bb/cc || echo path DNE
+echo expecting (True) and yay; mkdir -p zz/yy/xx && [ -e zz/yy/xx ] && echo yay
+rmdir -p zz/yy/xx || mkdir -p x1/x2/x3 && ls; exit
