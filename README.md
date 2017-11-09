@@ -6,4 +6,4 @@ This program in C++ is designed to be a command shell. The shell performs the fo
 *Executes multiple commands based on the connectors  
 *Exits the shell with a built in command  
 *Considers anything after a # character a comment  
-
+[style guide] (https://google.github.io/styleguide/cppguide.html)
