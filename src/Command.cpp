@@ -12,7 +12,6 @@
 #include "Command.h"
 #include <unistd.h>
 Command::Command(std::vector<std::string> userEnter){
-    this -> toBlowUp = 0;
     this -> IsConnector = false;
     this -> left = this;
     this -> right= this;
@@ -24,13 +23,13 @@ Command::Command(std::vector<std::string> userEnter){
         char *cstr = new char[userEnter.at(i).size() + 1];
         strcpy(cstr, userEnter.at(i).c_str());
         this -> Args[i] = cstr;
-        this -> toBlowUp++;
+        this ->  toBlowUp = userEnter.size();
     }
 }
 Command::~Command(){
     for (int i = 0; i < this -> toBlowUp; i++){
        delete this -> Args[i];
-       this -> Args[i] = 0;
+       this -> Args[i] = NULL;
     }
 }
 //connector only function
@@ -70,7 +69,6 @@ void Command::execute(int &status){
             else{
                 std::cout << "(False)" << std::endl;
                 status = -1;
-                closedir(dir);
                 return;
             }
         }
