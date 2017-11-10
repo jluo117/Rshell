@@ -12,6 +12,7 @@
 #include "Command.h"
 #include <unistd.h>
 Command::Command(std::vector<std::string> userEnter){
+    this -> toBlowUp = 0;
     this -> IsConnector = false;
     this -> left = this;
     this -> right= this;
@@ -27,8 +28,9 @@ Command::Command(std::vector<std::string> userEnter){
     }
 }
 Command::~Command(){
-    for (int i = 0; i < toBlowUp; i++){
+    for (int i = 0; i < this -> toBlowUp; i++){
        delete this -> Args[i];
+       this -> Args[i] = 0;
     }
 }
 //connector only function
@@ -56,29 +58,24 @@ void Command::execute(int &status){
            Flag = "-e";
            File = this -> Args[1];
         }
-
+        std::ifstream f(File);
+        DIR* dir = opendir(File);
         if (Flag == "-e"){
-            DIR* dir = opendir(File);
-            std::ifstream f(File);
-            if (f.good()){
+            if ((f.good()) || (dir)){
                 std::cout << "(True)" << std::endl;
                 status = 0;
-                return;
-            }
-            else if (dir){
-                std::cout << "(True)" << std::endl;
-                status = 0;
+                closedir(dir);
                 return;
             }
             else{
                 std::cout << "(False)" << std::endl;
                 status = -1;
+                closedir(dir);
                 return;
             }
         }
         if (Flag == "-f"){
-            std::ifstream f(File);
-            if (f.good()){
+            if ((f.good()) && (!dir)){
                 std::cout << "(True)" << std::endl;
                 status = 0;
                 return;
@@ -90,10 +87,10 @@ void Command::execute(int &status){
             }
         }
         if (Flag == "-d"){
-           DIR* dir = opendir(File);
            if (dir){
                std::cout << "(True)" << std::endl;
                status = 0;
+               closedir(dir);
                return;
            }
            else{
