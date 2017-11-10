@@ -3,7 +3,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <dirent.h>
 #include <stdlib.h>
+#include<fstream>
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
@@ -45,49 +47,57 @@ void Command::execute(int &status){
     }
     else if (CommandCheck == "test"){
         std::string Flag;
-        std::string File;
+        char *File;
         if (this -> toBlowUp > 2){
-            flag = this -> Args[1];
-            File = this -> Args[2];
+            Flag = this -> Args[1];
+            File  =  Args[2];
         }
         else{
-           flag = "-e";
+           Flag = "-e";
            File = this -> Args[1];
         }
 
-        if (flag == "-e"){
-            std::ifstream f(File);
-            if (f.good()){
-                status = 0;
-                return;
-            }
+        if (Flag == "-e"){
             DIR* dir = opendir(File);
-            else if (dir){
-                status = 0;
-                return;
-            }
-            else{
-                status = -1;
-                return;
-            }
-        }
-        if (flag == "-f"){
             std::ifstream f(File);
             if (f.good()){
+                std::cout << "(True)" << std::endl;
+                status = 0;
+                return;
+            }
+            else if (dir){
+                std::cout << "(True)" << std::endl;
                 status = 0;
                 return;
             }
             else{
+                std::cout << "(False)" << std::endl;
                 status = -1;
+                return;
             }
         }
-        if (flag == "-d"){
+        if (Flag == "-f"){
+            std::ifstream f(File);
+            if (f.good()){
+                std::cout << "(True)" << std::endl;
+                status = 0;
+                return;
+            }
+            else{
+                std::cout << "(False)" << std::endl;
+                status = -1;
+                return;
+            }
+        }
+        if (Flag == "-d"){
            DIR* dir = opendir(File);
            if (dir){
+               std::cout << "(True)" << std::endl;
                status = 0;
                return;
            }
            else{
+               std::cout << "(False)" << std::endl;
                status = -1;
                return;
            }
