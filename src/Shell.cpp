@@ -5,7 +5,6 @@
 #include <map>
 #include <boost/tokenizer.hpp>
 #include "Shell.h"
-void printVector(std::vector<std::string> test);
 using namespace boost;
 Shell::Shell(){
 }

@@ -6,9 +6,6 @@
 #include "Or.h"
 #include "Command.h"
 class Shell{
-    private:
-        Base* build(Base*,Base*);
-        Base* splitBuild(std::vector<Base*> &userInputs);
     public:
         Shell();
         void runShell();
