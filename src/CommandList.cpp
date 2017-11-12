@@ -5,7 +5,7 @@
 #include <map>
 #include <boost/tokenizer.hpp>
 #include "CommandList.h"
-CommandList::CommandList(Tok tok,Tok::iterator cur,int layer, int &flag){
+CommandList::CommandList(Tok tok,Tok::iterator &cur,int layer, int &flag){
     std::vector<Base*> userCall;
     std::vector<Base*> userInputs;
     std::vector<std::string> inputSplit;
@@ -28,6 +28,7 @@ CommandList::CommandList(Tok tok,Tok::iterator cur,int layer, int &flag){
             }
             And *newAnd = new And();
             userInputs.push_back(newAnd);
+            cur++;
             continue;
         }
         passInArg.push_back(*cur);
@@ -37,8 +38,10 @@ CommandList::CommandList(Tok tok,Tok::iterator cur,int layer, int &flag){
                 toBreak.push_back(userInputs);
                 userInputs.clear();
                 passInArg.clear();
+                cur++;
                 break;
             }
+            cur++;
     }
     if (passInArg.size() == 0){
     }
@@ -73,7 +76,7 @@ CommandList::CommandList(Tok tok,Tok::iterator cur,int layer, int &flag){
     }
     this -> Actions = (splitBuild(userInputs));
 }
-Base* Shell::splitBuild(std::vector<Base*> &userInputs){
+Base* CommandList::splitBuild(std::vector<Base*> &userInputs){
     int q = userInputs.size();
     if (q == 1){
         return userInputs.at(0);
@@ -89,7 +92,7 @@ Base* Shell::splitBuild(std::vector<Base*> &userInputs){
     return build(leftSpliters,rightSpliters);
 }
 
-Base* Shell::build(Base* left, Base* right){
+Base* CommandList::build(Base* left, Base* right){
     if (right -> IsConnector){
         right -> add_left(left);
         return right;
@@ -97,4 +100,6 @@ Base* Shell::build(Base* left, Base* right){
     left ->add_right(right);
         return left;
 }
-
+void CommandList::execute(int &flag){
+    Actions -> execute(flag);
+}

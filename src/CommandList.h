@@ -13,5 +13,5 @@ class CommandList: public Base{
     public:
         CommandList(Tok tok,Tok::iterator cur,int layer);
         ~CommandList();
-        void execute(int);
-}
+        void execute(int &flag);
+};
