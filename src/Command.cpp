@@ -2,7 +2,10 @@
 #include <string>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
+#include <dirent.h>
 #include <stdlib.h>
+#include<fstream>
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
@@ -20,12 +23,13 @@ Command::Command(std::vector<std::string> userEnter){
         char *cstr = new char[userEnter.at(i).size() + 1];
         strcpy(cstr, userEnter.at(i).c_str());
         this -> Args[i] = cstr;
-        this -> toBlowUp++;
+        this ->  toBlowUp = userEnter.size();
     }
 }
 Command::~Command(){
-    for (int i = 0; i < toBlowUp; i++){
+    for (int i = 0; i < this -> toBlowUp; i++){
        delete this -> Args[i];
+       this -> Args[i] = NULL;
     }
 }
 //connector only function
@@ -33,15 +37,70 @@ void Command::fetchName(){
 }
 void Command::execute(int &status){
 
-    std::string exitCheck = this -> Args[0];
-    if (exitCheck == "exit"){
+    std::string CommandCheck = this -> Args[0];
+    if (CommandCheck == "exit"){
     while(1){
         exit(0);
     }
     }
-    if (exitCheck == ";"){
+    if (CommandCheck == ";"){
         return;
     }
+    else if (CommandCheck == "test"){
+        std::string Flag;
+        char *File;
+        if (this -> toBlowUp > 2){
+            Flag = this -> Args[1];
+            File  =  Args[2];
+        }
+        else{
+           Flag = "-e";
+           File = this -> Args[1];
+        }
+        std::ifstream f(File);
+        DIR* dir = opendir(File);
+        if (Flag == "-e"){
+            if ((f.good()) || (dir)){
+                std::cout << "(True)" << std::endl;
+                status = 0;
+                closedir(dir);
+                return;
+            }
+            else{
+                std::cout << "(False)" << std::endl;
+                status = -1;
+                return;
+            }
+        }
+        if (Flag == "-f"){
+            if ((f.good()) && (!dir)){
+                std::cout << "(True)" << std::endl;
+                status = 0;
+                return;
+            }
+            else{
+                std::cout << "(False)" << std::endl;
+                status = -1;
+                return;
+            }
+        }
+        if (Flag == "-d"){
+           if (dir){
+               std::cout << "(True)" << std::endl;
+               status = 0;
+               closedir(dir);
+               return;
+           }
+           else{
+               std::cout << "(False)" << std::endl;
+               status = -1;
+               return;
+           }
+        }
+        status = -1;
+        return;
+    }
+
     int pid = fork();
 	//child fuction is running
     if (pid == 0){
