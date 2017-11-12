@@ -5,12 +5,21 @@
 #include <map>
 #include <boost/tokenizer.hpp>
 #include "CommandList.h"
-CommandList::CommandList(std::vector<std::string>& inputSplit, int &cur,int layer, int &flag){
+CommandList::CommandList(std::vector<std::string> &inputSplit, int &cur,int layer, int &flag){
+    bool endPar = false;
     this -> IsConnector = false;
     std::vector<Base*> userCall;
     std::vector<Base*> userInputs;
     std::vector<std::string> passInArg;
     while (cur < inputSplit.size()){
+        std::string XcodeTest= inputSplit.at(cur);
+        if (inputSplit.at(cur).front() == '('){
+            inputSplit.at(cur) = inputSplit.at(cur).substr(1,inputSplit.at(cur).size());
+            CommandList* newBase = new CommandList(inputSplit,cur,layer + 1,flag);
+            userInputs.push_back(newBase);
+            //cur++;
+            continue;
+        }
         if (inputSplit.at(cur) == "||") {
             if (passInArg.size() > 0){
                 Command* newBase = new Command(passInArg);
@@ -33,19 +42,29 @@ CommandList::CommandList(std::vector<std::string>& inputSplit, int &cur,int laye
             cur++;
             continue;
         }
-            if (inputSplit.at(cur).back() == ';'){
+        if (inputSplit.at(cur).back() == ')'){
+            endPar = true;
+            inputSplit.at(cur) = inputSplit.at(cur).substr(0, inputSplit.at(cur).size() -1);
+        }
+        if (inputSplit.at(cur).back() == ';'){
+            inputSplit.at(cur) = inputSplit.at(cur).substr(0, inputSplit.at(cur).size() -1);
+            if (inputSplit.at(cur).back() == ')'){
+                endPar = true;
                 inputSplit.at(cur) = inputSplit.at(cur).substr(0, inputSplit.at(cur).size() -1);
-                std::string test= inputSplit.at(cur);
-                if (test.size() > 0){
-                passInArg.push_back(inputSplit.at(cur));
+            }
+            std::string test= inputSplit.at(cur);
+                if (inputSplit.at(cur).size() > 0){
+                    passInArg.push_back(inputSplit.at(cur));
                 }
                 break;
-            }
+        }
             else{
                 passInArg.push_back(inputSplit.at(cur));
                 cur++;
             }
-        
+        if (endPar){
+            break;
+        }
     }
     if (passInArg.size() == 0){
     }
