@@ -13,8 +13,8 @@
 #include <unistd.h>
 Command::Command(std::vector<std::string> userEnter){
     this -> IsConnector = false;
-    this -> left = this;
-    this -> right= this;
+    this -> Left = this;
+    this -> Right= this;
     if (userEnter.at(0).back() == ';'){
         userEnter.at(0) = userEnter.at(0).substr(0,userEnter.at(0).size() -1);
     }
@@ -33,7 +33,7 @@ Command::~Command(){
     }
 }
 //connector only function
-void Command::fetchName(){
+void Command::fetch_name(){
 }
 void Command::execute(int &status){
 

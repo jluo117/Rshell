@@ -4,9 +4,9 @@ class Base{
     public:
         virtual ~Base(){}
         bool IsConnector;
-        Base *left;
-        Base *right;
-        virtual void fetchName ()=0;
+        Base *Left;
+        Base *Right;
+        virtual void fetch_name ()=0;
         virtual void execute(int &status) = 0;
         virtual void add_left(Base*) = 0;
         virtual void add_right(Base*)= 0;

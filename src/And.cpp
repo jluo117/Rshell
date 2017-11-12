@@ -8,20 +8,20 @@ And::And(){
 }
 And::And(Base *left){
     this -> IsConnector = true;
-    this -> left = left;
-    this -> right = 0;
+    this -> Left = left;
+    this -> Right = 0;
 }
 And::~And(){
-    delete this -> left;
-    delete this -> right;
+    delete this -> Left;
+    delete this -> Right;
 }
 void And::add_left(Base *left){
-    this -> left = left;
+    this -> Left = left;
 }
 void And::add_right(Base *right){
-    this -> right = right;
+    this -> Right = right;
 }
-void And::fetchName(){
+void And::fetch_name(){
     std::cout<< "parse error near " << "'&&'" << std::endl;
 }
 void And::execute(int &status){

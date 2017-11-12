@@ -14,26 +14,26 @@ Or::~Or(){
     delete this -> left;
 }
 //error call
-void Or::fetchName(){
+void Or::fetch_name(){
     std::cout << "parse error near " << "'||'" << std::endl;
 }
 void Or::add_right(Base *right){
-    this -> right = right;
+    this -> Right = right;
 }
 void Or::add_left(Base *left){
-    this -> left = left;
+    this -> Left = left;
 }
 void Or::execute(int &status){
     int opt = 0;
-    if ((this -> right == 0) || (this -> left == 0)){
+    if ((this -> Right == 0) || (this -> Left == 0)){
        std::cout << "missing arguement" << std::endl;
        status = -1;
        return;
    }
-    this -> left -> execute(opt);
+    this -> Reft -> execute(opt);
     if (opt != 0){
         opt = 0;
-        this -> right -> execute(opt);
+        this -> Right -> execute(opt);
         status = opt;
         return;
     }
