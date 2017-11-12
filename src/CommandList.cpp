@@ -5,12 +5,13 @@
 #include <map>
 #include <boost/tokenizer.hpp>
 #include "CommandList.h"
-CommandList::CommandList(Tok tok,Tok::iterator &cur,int layer, int &flag){
+CommandList::CommandList(std::vector<std::string>& inputSplit, int &cur,int layer, int &flag){
+    this -> IsConnector = false;
     std::vector<Base*> userCall;
     std::vector<Base*> userInputs;
-    std::vector<std::string> inputSplit;
-    while (cur != tok.end()){
-        if (*cur == "||") {
+    std::vector<std::string> passInArg;
+    while (cur < inputSplit.size()){
+        if (inputSplit.at(cur) == "||") {
             if (passInArg.size() > 0){
                 Command* newBase = new Command(passInArg);
                 passInArg.clear();
@@ -18,9 +19,10 @@ CommandList::CommandList(Tok tok,Tok::iterator &cur,int layer, int &flag){
             }
             Or *newOr = new Or();
             userInputs.push_back(newOr);
+            cur++;
             continue;
         }
-        if (*cur == "&&"){
+        if (inputSplit.at(cur) == "&&"){
             if (passInArg.size() > 0){
                 Command* newBase = new Command(passInArg);
                 userInputs.push_back(newBase);
@@ -31,17 +33,19 @@ CommandList::CommandList(Tok tok,Tok::iterator &cur,int layer, int &flag){
             cur++;
             continue;
         }
-        passInArg.push_back(*cur);
-            if (cur -> back() == ';'){
-                Command* newBase = new Command(passInArg);
-                userInputs.push_back(newBase);
-                toBreak.push_back(userInputs);
-                userInputs.clear();
-                passInArg.clear();
-                cur++;
+            if (inputSplit.at(cur).back() == ';'){
+                inputSplit.at(cur) = inputSplit.at(cur).substr(0, inputSplit.at(cur).size() -1);
+                std::string test= inputSplit.at(cur);
+                if (test.size() > 0){
+                passInArg.push_back(inputSplit.at(cur));
+                }
                 break;
             }
-            cur++;
+            else{
+                passInArg.push_back(inputSplit.at(cur));
+                cur++;
+            }
+        
     }
     if (passInArg.size() == 0){
     }
@@ -55,19 +59,19 @@ CommandList::CommandList(Tok tok,Tok::iterator &cur,int layer, int &flag){
             if (j == 0){
                 flag = -1;
                 userInputs.at(j) ->fetch_name();
-                return;
+                return ;
             }
             if (j == userInputs.size() -1){
-                flag = -1;
-                userInputs.at(j) ->fetchName();
-                return;
-            }
-            if (userVec.at(j - 1) -> IsConnector){
                 flag = -1;
                 userInputs.at(j) ->fetch_name();
                 return;
             }
-            if (userVec.at(j + 1) -> IsConnector){
+            if (userInputs.at(j - 1) -> IsConnector){
+                flag = -1;
+                userInputs.at(j) ->fetch_name();
+                return;
+            }
+            if (userInputs.at(j + 1) -> IsConnector){
                 flag = -1;
                 userInputs.at(j) ->fetch_name();
                 return;
@@ -75,6 +79,9 @@ CommandList::CommandList(Tok tok,Tok::iterator &cur,int layer, int &flag){
         }
     }
     this -> Actions = (splitBuild(userInputs));
+}
+CommandList::~CommandList(){
+    delete this -> Actions;
 }
 Base* CommandList::splitBuild(std::vector<Base*> &userInputs){
     int q = userInputs.size();
@@ -103,3 +110,7 @@ Base* CommandList::build(Base* left, Base* right){
 void CommandList::execute(int &flag){
     Actions -> execute(flag);
 }
+//junk functions
+void CommandList::add_left(Base* right){}
+void CommandList::add_right(Base* left){}
+void CommandList::fetch_name(){}

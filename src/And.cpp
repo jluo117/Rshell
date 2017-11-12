@@ -3,8 +3,8 @@
 #include "And.h"
 And::And(){
     this -> IsConnector = true;
-    this -> left = 0;
-    this -> right = 0;
+    this -> Left = 0;
+    this -> Right = 0;
 }
 And::And(Base *left){
     this -> IsConnector = true;
@@ -25,13 +25,13 @@ void And::fetch_name(){
     std::cout<< "parse error near " << "'&&'" << std::endl;
 }
 void And::execute(int &status){
-    if ((this -> right == 0) || (this -> left == 0)){
+    if ((this -> Right == 0) || (this -> Left == 0)){
         std::cout << "missing arguemnet" << std::endl;
         status = -1;
         return;
     }
         int curState = 0;
-        this -> Reft -> execute(curState);
+        this -> Left -> execute(curState);
         if (curState != -0){
             status = -1;
             return;

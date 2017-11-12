@@ -30,7 +30,7 @@ void Or::execute(int &status){
        status = -1;
        return;
    }
-    this -> Reft -> execute(opt);
+    this -> Left -> execute(opt);
     if (opt != 0){
         opt = 0;
         this -> Right -> execute(opt);
