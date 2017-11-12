@@ -11,7 +11,12 @@ class CommandList: public Base{
         Base* splitBuild(std::vector<Base*> &userInputs);
         Base* Actions;
     public:
-        CommandList(Tok tok,Tok::iterator cur,int layer);
+        CommandList(std::vector<std::string>& inputSplit, int &cur,int layer, int &flag);
         ~CommandList();
         void execute(int &flag);
+        void add_left(Base*);
+        void add_right(Base*);
+        void fetch_name ();
 };
+#endif
+

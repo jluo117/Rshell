@@ -2,16 +2,16 @@
 #include "Or.h"
 Or::Or(){
     this -> IsConnector = true;
-    this -> left = 0;
-    this -> right = 0;
+    this -> Left = 0;
+    this -> Right = 0;
 }
 Or::Or(Base *left){
-    this -> left = left;
-    this -> right = 0;
+    this -> Left = left;
+    this -> Right = 0;
 }
 Or::~Or(){
-    delete this -> right;
-    delete this -> left;
+    delete this -> Right;
+    delete this -> Left;
 }
 //error call
 void Or::fetch_name(){
@@ -30,7 +30,7 @@ void Or::execute(int &status){
        status = -1;
        return;
    }
-    this -> Reft -> execute(opt);
+    this -> Left -> execute(opt);
     if (opt != 0){
         opt = 0;
         this -> Right -> execute(opt);

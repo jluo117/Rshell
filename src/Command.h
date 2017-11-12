@@ -7,7 +7,7 @@
 #include "Base.h"
 class Command: public Base{
     ~Command();
-    void fetchName();
+    void fetch_name();
     void add_left(Base*);
     void add_right(Base*);
     char *Args[200];
