@@ -31,12 +31,12 @@ void And::execute(int &status){
         return;
     }
         int curState = 0;
-        this -> left -> execute(curState);
+        this -> Reft -> execute(curState);
         if (curState != -0){
             status = -1;
             return;
         }
-        this -> right -> execute(curState);
+        this -> Right -> execute(curState);
         if (curState != 0){
             status = -1;
             return;
