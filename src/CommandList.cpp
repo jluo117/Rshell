@@ -42,26 +42,25 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, int &cur,int laye
             cur++;
             continue;
         }
-        if (inputSplit.at(cur).back() == ')'){
-            endPar = true;
-            inputSplit.at(cur) = inputSplit.at(cur).substr(0, inputSplit.at(cur).size() -1);
-        }
         if (inputSplit.at(cur).back() == ';'){
-            inputSplit.at(cur) = inputSplit.at(cur).substr(0, inputSplit.at(cur).size() -1);
-            if (inputSplit.at(cur).back() == ')'){
+            std::string toPushIn = getColon(inputSplit.at(cur),endPar);
+            if (toPushIn.back() == ')'){
                 endPar = true;
-                inputSplit.at(cur) = inputSplit.at(cur).substr(0, inputSplit.at(cur).size() -1);
+                toPushIn = toPushIn.substr(0,toPushIn.size()-1);
             }
             std::string test= inputSplit.at(cur);
-                if (inputSplit.at(cur).size() > 0){
-                    passInArg.push_back(inputSplit.at(cur));
+                if (toPushIn.size() > 0){
+                    passInArg.push_back(toPushIn);
                 }
-                break;
+            cur++;
+            break;
         }
-            else{
-                passInArg.push_back(inputSplit.at(cur));
-                cur++;
-            }
+        if (inputSplit.at(cur).back() == ')'){
+            endPar = true;
+            inputSplit.at(cur) = this -> getPar(inputSplit.at(cur));
+        }
+        passInArg.push_back(inputSplit.at(cur));
+        cur++;
         if (endPar){
             break;
         }
@@ -102,6 +101,26 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, int &cur,int laye
 CommandList::~CommandList(){
     delete this -> Actions;
 }
+std::string CommandList:: getColon (std::string input,bool &endPar){
+    input = input.substr(0,input.size() -1);
+    if (input.back() == ')'){
+        endPar = true;
+        return getPar(input);
+    }
+    return input;
+}
+std::string CommandList::getPar(std::string input){
+    input = input.substr(0,input.size() -1);
+    if (input.back() == ';'){
+            input = input.substr(0,input.size() -1);
+            return input;
+        }
+    return input;
+    }
+
+
+
+
 Base* CommandList::splitBuild(std::vector<Base*> &userInputs){
     int q = userInputs.size();
     if (q == 1){
