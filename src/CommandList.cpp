@@ -59,7 +59,9 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, int &cur,int laye
             endPar = true;
             inputSplit.at(cur) = this -> getPar(inputSplit.at(cur));
         }
+        if (!inputSplit.at(cur).empty()){
         passInArg.push_back(inputSplit.at(cur));
+        }
         cur++;
         if (endPar){
             break;
