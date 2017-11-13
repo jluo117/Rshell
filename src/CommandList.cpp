@@ -116,7 +116,7 @@ std::string CommandList::getPar(std::string input){
             return input;
         }
     return input;
-    }
+}
 
 
 
