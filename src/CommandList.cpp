@@ -26,7 +26,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
         }
 
         if (isTest){
-            int brackLoc = inputSplit.at(cur).find(']');
+            unsigned brackLoc = inputSplit.at(cur).find(']');
             if (brackLoc != std::string::npos){
                 if (brackLoc != inputSplit.at(cur).size() -1){
                     if ((inputSplit.at(cur).at(brackLoc + 1) != ';')||(inputSplit.at(cur).at(brackLoc + 1) != ')')){
