@@ -23,7 +23,7 @@ void Shell::runShell(){
         std::vector<std::string> passInArg;
         typedef tokenizer<char_separator<char> > Tok;
         char_separator<char> sep(" "); // default constructed
-        int cur = 0;
+        unsigned cur = 0;
 	for (unsigned i = 0; i < UserInput.size(); i++){
 	    if (UserInput.at(i) == '#') {
 		UserInput = UserInput.substr(0, i);
@@ -60,7 +60,7 @@ void Shell::runShell(){
         }
         cur++;
     }
-    for (int i = 0; i < userInputs.size(); i++){
+    for (unsigned i = 0; i < userInputs.size(); i++){
         userInputs.at(i) -> execute(flag);
     }
     }

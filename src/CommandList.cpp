@@ -5,7 +5,7 @@
 #include <map>
 #include <boost/tokenizer.hpp>
 #include "CommandList.h"
-CommandList::CommandList(std::vector<std::string> &inputSplit, int &cur,int layer, int &flag){
+CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int layer, int &flag){
     bool endPar = false;
     this -> IsConnector = false;
     std::vector<Base*> userCall;
@@ -74,7 +74,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, int &cur,int laye
         userInputs.push_back(newBase);
     }
     passInArg.clear();
-    for (int j = 0; j < userInputs.size(); j++){
+    for (unsigned j = 0; j < userInputs.size(); j++){
         if (userInputs.at(j) -> IsConnector){
             if (j == 0){
                 flag = -1;

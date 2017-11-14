@@ -13,7 +13,7 @@ class CommandList: public Base{
         std::string getColon (std::string input,bool &endPar);
         std::string getPar (std::string input);
     public:
-        CommandList(std::vector<std::string>& inputSplit, int &cur,int layer, int &flag);
+        CommandList(std::vector<std::string>& inputSplit, unsigned &cur,int layer, int &flag);
         ~CommandList();
         void execute(int &flag);
         void add_left(Base*);
