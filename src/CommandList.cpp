@@ -11,12 +11,43 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, int &cur,int laye
     std::vector<Base*> userCall;
     std::vector<Base*> userInputs;
     std::vector<std::string> passInArg;
+    bool isTest = false;
     while (cur < inputSplit.size()){
         std::string XcodeTest= inputSplit.at(cur);
+        if (inputSplit.at(cur).front() == '['){
+            inputSplit.at(cur) = inputSplit.at(cur).substr(1,inputSplit.at(cur).size());
+            if (!passInArg.empty()){
+                flag = -1;
+                std::cout << "Your command is invalid.\n go play some World of Warcraft" << std::endl;
+                return;
+            }
+            passInArg.push_back("test");
+            isTest = true;
+        }
+
+        if (isTest){
+            int brackLoc = inputSplit.at(cur).find(']');
+            if (brackLoc != std::string::npos){
+                if (brackLoc != inputSplit.at(cur).size() -1){
+                    if ((inputSplit.at(cur).at(brackLoc + 1) != ';')||(inputSplit.at(cur).at(brackLoc + 1) != ')')){
+                        std::cout << "Your command is invalid.\n go play some World of Warcraft" << std::endl;
+                        flag = -1;
+                        return;
+                    }
+                }
+                inputSplit.at(cur).erase(brackLoc);
+                isTest = false;
+            }
+        }
+
         if (inputSplit.at(cur).front() == '('){
             inputSplit.at(cur) = inputSplit.at(cur).substr(1,inputSplit.at(cur).size());
             CommandList* newBase = new CommandList(inputSplit,cur,layer + 1,flag);
+            if (flag == -1){
+                return;
+            }
             userInputs.push_back(newBase);
+
             //cur++;
             continue;
         }
