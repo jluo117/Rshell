@@ -58,7 +58,7 @@ void Shell::runShell(){
         if (flag == -1){
            break;
         }
-        cur++;
+        //cur++;
     }
     for (unsigned i = 0; i < userInputs.size(); i++){
         userInputs.at(i) -> execute(flag);
