@@ -1,4 +1,5 @@
 #include <iostream>
+#include <regex>
 #include <utility>
 #include <vector>
 #include <string>
@@ -13,6 +14,7 @@ void Shell::runShell(){
         int left = 0;
         int right = 0;
         int flag = 0;
+        std::regex e ("\\b(\")([^ ]*)");
 		std::vector<Base*> userCall;
         std::vector< std::vector<Base*>  >toBreak;
         std::vector<Base*> userInputs;
@@ -41,6 +43,25 @@ void Shell::runShell(){
             }
         else if (it -> front() == '(' ){
             left++;
+        }
+        if (it -> front() == '"'){
+            std::string newString = it -> substr(1,it -> size()-1);
+            it++;
+            while (it != tok.end()){
+                if (it -> find('"')!= std::string::npos){
+                    std::string holder = std::regex_replace (*it,e,"-$2");
+                    newString += holder;
+                    *it++;
+                    break;
+                }
+                newString += *it;
+                *it++;
+            }
+            if (newString.back() == '"'){
+                newString = newString.substr(0,newString.size() -1);
+            }
+            inputSplit.push_back(newString);
+            break;
         }
         inputSplit.push_back(*it);
     }
