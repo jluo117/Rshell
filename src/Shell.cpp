@@ -49,17 +49,18 @@ void Shell::runShell(){
             it++;
             while (it != tok.end()){
                 if (it -> find('"')!= std::string::npos){
-                    std::string holder = std::regex_replace (*it,e,"-$2");
-                    newString += holder;
+                    std::string holder = std::regex_replace (*it,e,"");
+                    newString += " " + holder;
                     *it++;
                     break;
                 }
-                newString += *it;
+                newString += " " + *it;
                 *it++;
             }
             if (newString.back() == '"'){
                 newString = newString.substr(0,newString.size() -1);
             }
+            newString = std::regex_replace (newString,e,"$2");
             inputSplit.push_back(newString);
             break;
         }
