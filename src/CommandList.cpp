@@ -2,18 +2,61 @@
 #include <utility>
 #include <vector>
 #include <string>
+#include <regex>
 #include <map>
 #include <boost/tokenizer.hpp>
 #include "CommandList.h"
 CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int layer, int &flag){
+    std::regex quoteReg ("\\b(\")([^ ]*)");
     bool endPar = false;
     this -> IsConnector = false;
     std::vector<Base*> userCall;
     std::vector<Base*> userInputs;
     std::vector<std::string> passInArg;
+    std::string quotes;
     bool isTest = false;
+    bool inQuotes = false;
     while (cur < inputSplit.size()){
-        std::string XcodeTest= inputSplit.at(cur);
+        std::string recived= inputSplit.at(cur);
+        int findLoc = recived.find('"');
+        if (findLoc != std::string::npos){
+            if (inQuotes){
+                inQuotes = false;
+                recived = std::regex_replace (recived,quoteReg,"$2");
+                quotes += " " + recived;
+                passInArg.push_back(quotes);
+                quotes = "";
+            }
+            else{
+                unsigned killLoc = findLoc;
+                inQuotes = true;
+                bool anotherQuote = false;
+                for (int i = killLoc; i < recived.size(); i++){
+                    if (recived.at(i) == '"'){
+                        anotherQuote = true;
+                    }
+                }
+                if (anotherQuote){
+                    inQuotes = false;
+                    recived = std::regex_replace (recived,quoteReg,"$2");
+                    recived = std::regex_replace (recived,quoteReg,"$2");
+                    passInArg.push_back(recived);
+                    cur++;
+                    continue;
+                }
+                recived = std::regex_replace (recived,quoteReg,"$2");
+                quotes = recived;
+                cur++;
+                continue;
+
+            }
+        }
+        if (inQuotes){
+            quotes += " " + recived;
+            cur++;
+            continue;
+        }
+        
         if (inputSplit.at(cur).front() == '['){
             inputSplit.at(cur) = inputSplit.at(cur).substr(1,inputSplit.at(cur).size());
             if (!passInArg.empty()){

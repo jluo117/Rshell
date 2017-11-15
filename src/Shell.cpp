@@ -14,7 +14,7 @@ void Shell::runShell(){
         int left = 0;
         int right = 0;
         int flag = 0;
-        std::regex e ("\\b(\")([^ ]*)");
+
         std::regex p1 ("\\b(()([^ ]*)");
         std::regex p2 ("\\b())([^ ]*)")
 		std::vector<Base*> userCall;
@@ -49,26 +49,7 @@ void Shell::runShell(){
         else if (it -> front() == '(' ){
             left++;
         }
-        if (it -> front() == '"'){
-            std::string newString = it -> substr(1,it -> size()-1);
-            it++;
-            while (it != tok.end()){
-                if (it -> find('"')!= std::string::npos){
-                    std::string holder = std::regex_replace (*it,e,"");
-                    newString += " " + holder;
-                    *it++;
-                    break;
-                }
-                newString += " " + *it;
-                *it++;
-            }
-            if (newString.back() == '"'){
-                newString = newString.substr(0,newString.size() -1);
-            }
-            newString = std::regex_replace (newString,e,"$2");
-            inputSplit.push_back(newString);
-            break;
-        }
+        
         inputSplit.push_back(*it);
     }
         if (left != right){
