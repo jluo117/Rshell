@@ -15,6 +15,8 @@ void Shell::runShell(){
         int right = 0;
         int flag = 0;
         std::regex e ("\\b(\")([^ ]*)");
+        std::regex p1 ("\\b(()([^ ]*)");
+        std::regex p2 ("\\b())([^ ]*)")
 		std::vector<Base*> userCall;
         std::vector< std::vector<Base*>  >toBreak;
         std::vector<Base*> userInputs;
@@ -31,6 +33,9 @@ void Shell::runShell(){
 		UserInput = UserInput.substr(0, i);
 	    }
 	}
+    //std::string tempInput = UserInput.substr(0, UserInput.size() - 1);
+    UserInput = std::regex_replace (UserInput, p1, "( ");
+    UserInput = std::regex_replace (UserInput, p2, " )"); 
     Tok tok(UserInput, sep);
     for (Tok::iterator it = tok.begin(); it != tok.end(); ++it){
         if ((it -> back() == ')') || ((it -> back() == ';') && (it -> at(it -> size() -2) == ')'))){
