@@ -15,8 +15,7 @@ void Shell::runShell(){
         int right = 0;
         int flag = 0;
 
-        std::regex p1 ("\\b(()([^ ]*)");
-        std::regex p2 ("\\b())([^ ]*)")
+        
 		std::vector<Base*> userCall;
         std::vector< std::vector<Base*>  >toBreak;
         std::vector<Base*> userInputs;
@@ -34,22 +33,19 @@ void Shell::runShell(){
 	    }
 	}
     //std::string tempInput = UserInput.substr(0, UserInput.size() - 1);
-    UserInput = std::regex_replace (UserInput, p1, "( ");
-    UserInput = std::regex_replace (UserInput, p2, " )"); 
+        for (unsigned i = 0; i < UserInput.size(); i++){
+            if (UserInput.at(i) == '('){
+                left++;
+            }
+            if (UserInput.at(i) == ')'){
+                right++;
+            }
+            if (right > left){
+                flag = -1;
+            }
+        }
     Tok tok(UserInput, sep);
     for (Tok::iterator it = tok.begin(); it != tok.end(); ++it){
-        if ((it -> back() == ')') || ((it -> back() == ';') && (it -> at(it -> size() -2) == ')'))){
-            right++;
-        }
-            if (right > left){
-                std::cout << "Warning: Computer does not know what to do \n preparing to wipe out your hard drive" << std::endl;
-                flag = -1;
-                break;
-            }
-        else if (it -> front() == '(' ){
-            left++;
-        }
-        
         inputSplit.push_back(*it);
     }
         if (left != right){

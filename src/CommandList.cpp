@@ -7,7 +7,7 @@
 #include <boost/tokenizer.hpp>
 #include "CommandList.h"
 CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int layer, int &flag){
-    std::regex quoteReg ("\\b(\")([^ ]*)");
+    std::regex quoteReg{"\""};
     bool endPar = false;
     this -> IsConnector = false;
     std::vector<Base*> userCall;
@@ -22,7 +22,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
         if (findLoc != std::string::npos){
             if (inQuotes){
                 inQuotes = false;
-                recived = std::regex_replace (recived,quoteReg,"$2");
+                recived = regex_replace (recived,quoteReg,"");
                 quotes += " " + recived;
                 passInArg.push_back(quotes);
                 quotes = "";
@@ -38,13 +38,13 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
                 }
                 if (anotherQuote){
                     inQuotes = false;
-                    recived = std::regex_replace (recived,quoteReg,"$2");
-                    recived = std::regex_replace (recived,quoteReg,"$2");
+                    recived = std::regex_replace (recived,quoteReg,"");
+                    recived = std::regex_replace (recived,quoteReg,"");
                     passInArg.push_back(recived);
                     cur++;
                     continue;
                 }
-                recived = std::regex_replace (recived,quoteReg,"$2");
+                recived = regex_replace (recived,quoteReg,"$2");
                 quotes = recived;
                 cur++;
                 continue;
@@ -130,10 +130,25 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             cur++;
             break;
         }
-        if (inputSplit.at(cur).back() == ')'){
+        int parCheck = inputSplit.at(cur).find(')');
+        if (parCheck != std::string::npos){
             endPar = true;
-            inputSplit.at(cur) = this -> getPar(inputSplit.at(cur));
+            if (inputSplit.at(cur).at(parCheck) == ')'){
+                std::string passInStr = inputSplit.at(cur).substr(0,parCheck);
+                inputSplit.at(cur) = inputSplit.at(cur).substr(parCheck + 1,inputSplit.at(cur).size());
+                std::string inside = inputSplit.at(cur);
+                if (!passInStr.empty()){
+                passInArg.push_back(passInStr);
+                }
+                if (inputSplit.at(cur).size() == 0){
+                    cur++;
+                }
+                break;
+            }
+            inputSplit.at(cur).erase(parCheck, parCheck+1);
+            
         }
+        std::string checkPoint =inputSplit.at(cur);
         if (!inputSplit.at(cur).empty()){
         passInArg.push_back(inputSplit.at(cur));
         }
