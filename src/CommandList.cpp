@@ -18,8 +18,8 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
     bool inQuotes = false;
     while (cur < inputSplit.size()){
         std::string recived= inputSplit.at(cur);
-        int findLoc = recived.find('"');
-        if (findLoc != std::string::npos){
+        size_t findLoc = recived.find('"');
+        if (findLoc != (std::string::npos)){
             if (inQuotes){
                 inQuotes = false;
                 recived = regex_replace (recived,quoteReg,"");
@@ -31,7 +31,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
                 unsigned killLoc = findLoc;
                 inQuotes = true;
                 bool anotherQuote = false;
-                for (int i = killLoc; i < recived.size(); i++){
+                for (size_t i = killLoc; i < recived.size(); i++){
                     if (recived.at(i) == '"'){
                         anotherQuote = true;
                     }
@@ -69,7 +69,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
         }
 
         if (isTest){
-            int brackLoc = inputSplit.at(cur).find(']');
+            size_t brackLoc = inputSplit.at(cur).find(']');
             if (brackLoc != std::string::npos){
                 std::string leftBreak = inputSplit.at(cur).substr(0,brackLoc);
                 inputSplit.at(cur) = inputSplit.at(cur).substr(brackLoc + 1,inputSplit.at(cur).size());
@@ -124,7 +124,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             cur++;
             continue;
         }
-        int breakCheck = inputSplit.at(cur).find(';');
+        size_t breakCheck = inputSplit.at(cur).find(';');
         if (breakCheck != std::string::npos){
             std::string toPushIn = inputSplit.at(cur).substr(0,breakCheck);
             inputSplit.at(cur) = inputSplit.at(cur).substr(breakCheck + 1,inputSplit.at(cur).size());
@@ -136,7 +136,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             }
             break;
         }
-        int parCheck = inputSplit.at(cur).find(')');
+        size_t parCheck = inputSplit.at(cur).find(')');
         if (parCheck != std::string::npos){
             endPar = true;
             std::string passInStr = inputSplit.at(cur).substr(0,parCheck);
