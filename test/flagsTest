@@ -1,9 +1,11 @@
 echo testing test with flags
-echo expecting (False): ; test abc/def/ghi
-mkdir -p abc/def/ghi; echo expecting (True): ; test abc/def/ghi
+test abc/def/ghi #false
+mkdir -p abc/def/ghi; test abc/def/ghi  #true
 cd abc; touch samplefile; cd ..
-echo testing -f flag, expecting (True); [ -f abc/samplefile ]
-echo testing -d flag, expecting (True); test -d abc/def
+echo testing -f flag; [ -f abc/samplefile ] #true
+echo testing -d flag; test -d abc/def  #true
 cd abc; rm samplefile; cd ..
+echo " test -e abc/def/ghi " "[-f 123/nonexistentfile]"
+echo  [ -d 123/456/789 ] ; echo " test zzz/qqq "
 exit
 

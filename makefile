@@ -1,4 +1,4 @@
-CFLAGS=-Wall -Werror -ansi -pedantic
+CFLAGS=-Wall -g -Werror -ansi -pedantic -std=c++11
 EXEC=rshell
 FINEXEC=bin/rshell
 all:rshell

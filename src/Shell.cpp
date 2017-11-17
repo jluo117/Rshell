@@ -1,4 +1,5 @@
 #include <iostream>
+#include <regex>
 #include <utility>
 #include <vector>
 #include <string>
@@ -13,6 +14,8 @@ void Shell::runShell(){
         int left = 0;
         int right = 0;
         int flag = 0;
+
+        
 		std::vector<Base*> userCall;
         std::vector< std::vector<Base*>  >toBreak;
         std::vector<Base*> userInputs;
@@ -23,25 +26,46 @@ void Shell::runShell(){
         std::vector<std::string> passInArg;
         typedef tokenizer<char_separator<char> > Tok;
         char_separator<char> sep(" "); // default constructed
-        int cur = 0;
-	for (unsigned i = 0; i < UserInput.size(); i++){
-	    if (UserInput.at(i) == '#') {
-		UserInput = UserInput.substr(0, i);
-	    }
-	}
+        unsigned cur = 0;
+	
+    unsigned numQmarks = 0;
+    bool openQ = false;
+    
+    for (unsigned i = 0; i < UserInput.size(); i++) {
+        if (UserInput.at(i) == '"') {
+            numQmarks++;
+        }
+    }
+    if ((numQmarks % 2) == 1){
+        std::cout << "FOUND UNBALANCED QUOTATION MARKS\n";
+        continue;
+    }
+    numQmarks = 0;
+
+        for (unsigned i = 0; i < UserInput.size(); i++){
+            if (UserInput.at(i) == '('){
+                left++;
+            }
+            if (UserInput.at(i) == ')'){
+                right++;
+            }
+            if (right > left){
+                flag = -1;
+            }
+        }
     Tok tok(UserInput, sep);
     for (Tok::iterator it = tok.begin(); it != tok.end(); ++it){
-        if ((it -> back() == ')') || ((it -> back() == ';') && (it -> at(it -> size() -2) == ')'))){
-            right++;
-        }
-            if (right > left){
-                std::cout << "Warning: Computer does not know what to do \n preparing to wipe out your hard drive" << std::endl;
-                flag = -1;
-                break;
+        for (unsigned n = 0; n < (it -> length()); n++) {
+            if ((it -> at(n)) == '"') {
+                numQmarks++;
             }
-        else if (it -> front() == '(' ){
-            left++;
+            if (((numQmarks%2) == 1)) {
+                openQ = true;
+            }
         }
+        if ( !openQ && ( (*it == "#") || (it -> at(0) == '#') ) ) {
+            break; //found #comment outside of quotation marks
+        }    
         inputSplit.push_back(*it);
     }
         if (left != right){
@@ -58,9 +82,9 @@ void Shell::runShell(){
         if (flag == -1){
            break;
         }
-        cur++;
+        //cur++;
     }
-    for (int i = 0; i < userInputs.size(); i++){
+    for (unsigned i = 0; i < userInputs.size(); i++){
         userInputs.at(i) -> execute(flag);
     }
     }

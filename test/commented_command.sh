@@ -1,5 +1,9 @@
 echo start of comment test || echo rip
-echo only 1 should print; echo 1 #; echo 2
-echo '#hello' &&  echo world # comment with space after #
-echo "comment without space after #" #fail
-echo end of test; exit
+echo this #echo not this
+echo hello #&& bye
+echo "comment should print #inside quotes"
+echo apple && echo banana # && echo orange
+echo "#" && ls -a
+ls #-a
+echo # test -e 123/456/789
+exit

@@ -1,5 +1,8 @@
 echo testing keyword test
-echo expecting (False): ; test -e dir1/dir2/dir3
+test -e dir1/dir2/dir3 #false
 mkdir -p dir1/dir2/dir3
-echo expecting (True): ; test -e dir1/dir2/dir3
-rmdir -p dir1/dir2/dir3; exit
+test -e dir1/dir2/dir3 #true
+rmdir -p dir1/dir2/dir3
+echo test output #test output
+echo "test" d1/d2/d4 #test d1/d2/d4
+exit

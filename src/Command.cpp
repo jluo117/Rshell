@@ -32,8 +32,10 @@ Command::~Command(){
        this -> Args[i] = NULL;
     }
 }
-//connector only function
+
 void Command::fetch_name(){
+    std::string UserCall = this -> Args[0];
+    std::cout << "Parsing error near " + UserCall << std::endl;
 }
 void Command::execute(int &status){
 
@@ -97,6 +99,7 @@ void Command::execute(int &status){
                return;
            }
         }
+        std::cout << "Invalid command " << std::endl;
         status = -1;
         return;
     }
