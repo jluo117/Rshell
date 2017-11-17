@@ -56,7 +56,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             cur++;
             continue;
         }
-        
+
         if (inputSplit.at(cur).front() == '['){
             inputSplit.at(cur) = inputSplit.at(cur).substr(1,inputSplit.at(cur).size());
             if (!passInArg.empty()){
@@ -71,17 +71,24 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
         if (isTest){
             int brackLoc = inputSplit.at(cur).find(']');
             if (brackLoc != std::string::npos){
-                if (brackLoc != inputSplit.at(cur).size() -1){
-                    if ((inputSplit.at(cur).at(brackLoc + 1) != ';')||(inputSplit.at(cur).at(brackLoc + 1) != ')')){
-                        std::cout << "Your command is invalid.\n go play some World of Warcraft" << std::endl;
-                        flag = -1;
-                        return;
-                    }
+                std::string leftBreak = inputSplit.at(cur).substr(0,brackLoc);
+                inputSplit.at(cur) = inputSplit.at(cur).substr(brackLoc + 1,inputSplit.at(cur).size());
+                std::string rightBreak = inputSplit.at(cur);
+                if (!leftBreak.empty()){
+                    passInArg.push_back(leftBreak);
                 }
-                unsigned bacLoc = brackLoc;
-                inputSplit.at(cur).erase(bacLoc);
-                isTest = false;
+                if (!rightBreak.empty()){
+                    if (rightBreak.front() == ';'|| rightBreak.front() == ')'){
+                        continue;
+                    }
+                
+                else{
+                    std::cout << rightBreak << " is invalid command" << std::endl;
+                    flag = -1;
+                    return;
+                }
             }
+        }
         }
 
         if (inputSplit.at(cur).front() == '('){
@@ -117,37 +124,34 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             cur++;
             continue;
         }
-        if (inputSplit.at(cur).back() == ';'){
-            std::string toPushIn = getColon(inputSplit.at(cur),endPar);
-            if (toPushIn.back() == ')'){
-                endPar = true;
-                toPushIn = toPushIn.substr(0,toPushIn.size()-1);
+        int breakCheck = inputSplit.at(cur).find(';');
+        if (breakCheck != std::string::npos){
+            std::string toPushIn = inputSplit.at(cur).substr(0,breakCheck);
+            inputSplit.at(cur) = inputSplit.at(cur).substr(breakCheck + 1,inputSplit.at(cur).size());
+            if (!toPushIn.empty()){
+                passInArg.push_back(toPushIn);
             }
-            std::string test= inputSplit.at(cur);
-                if (toPushIn.size() > 0){
-                    passInArg.push_back(toPushIn);
-                }
-            cur++;
+            if (inputSplit.at(cur).size() == 0){
+                cur++;
+            }
             break;
         }
         int parCheck = inputSplit.at(cur).find(')');
         if (parCheck != std::string::npos){
             endPar = true;
-            if (inputSplit.at(cur).at(parCheck) == ')'){
-                std::string passInStr = inputSplit.at(cur).substr(0,parCheck);
-                inputSplit.at(cur) = inputSplit.at(cur).substr(parCheck + 1,inputSplit.at(cur).size());
-                std::string inside = inputSplit.at(cur);
-                if (!passInStr.empty()){
+            std::string passInStr = inputSplit.at(cur).substr(0,parCheck);
+            inputSplit.at(cur) = inputSplit.at(cur).substr(parCheck + 1,inputSplit.at(cur).size());
+            std::string inside = inputSplit.at(cur);
+            if (!passInStr.empty()){
                 passInArg.push_back(passInStr);
-                }
-                if (inputSplit.at(cur).size() == 0){
-                    cur++;
-                }
-                break;
             }
-            inputSplit.at(cur).erase(parCheck, parCheck+1);
-            
-        }
+            if (inputSplit.at(cur).size() == 0){
+                cur++;
+            }
+            break;
+    }
+        
+    
         std::string checkPoint =inputSplit.at(cur);
         if (!inputSplit.at(cur).empty()){
         passInArg.push_back(inputSplit.at(cur));
@@ -238,6 +242,9 @@ Base* CommandList::build(Base* left, Base* right){
         return left;
 }
 void CommandList::execute(int &flag){
+    if (flag == -1){
+        return;
+    }
     Actions -> execute(flag);
 }
 //junk functions
