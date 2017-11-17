@@ -1,5 +1,11 @@
 echo testing bracket test
-echo expecting (False): ; [ -e test1/test2/test3 ]
+[ -e test1/test2/test3 ] ; echo hello # False
 mkdir -p test1/test2/test3
-echo ecpecting (True): ; [ -e test1/test2/test3 ]
-rmdir -p test1/test2/test3; exit
+[ test1/test2/test3 ] # True
+rmdir -p test1/test2/test3; 
+[test1/test2/test3] #command not found
+echo [ print/whole/line ]
+echo "[ AA/BB/CC ] # everything in quotes print"
+echo hello " [ -e d1/d2/d3 ] " # hello [ -e d1/d2/d3 ]
+echo [ "jj/kk/ll" ] # [ jj/kk/ll ]
+exit

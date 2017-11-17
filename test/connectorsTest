@@ -1,4 +1,8 @@
 echo testing test with connectors
-echo expecting (False) and path DNE; test -e aa/bb/cc || echo path DNE
-echo expecting (True) and yay; mkdir -p zz/yy/xx && [ -e zz/yy/xx ] && echo yay
-rmdir -p zz/yy/xx || mkdir -p x1/x2/x3 && ls; exit
+test -e aa/bb/cc || echo path DNE  ; echo "making zz/yy/xx" #False path DNE making zz/yy/xx
+mkdir -p zz/yy/xx && [ -e zz/yy/xx ] && echo yay #true yay
+rmdir -p zz/yy/xx || mkdir -p x1/x2/x3 && ls
+echo " echo this || test -e xyz/abd/123 ; #should print"
+echo " [ xyz/abc/123 ] ; test xyz/abc/123 && echo #should also print"
+
+exit
