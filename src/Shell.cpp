@@ -27,12 +27,21 @@ void Shell::runShell(){
         typedef tokenizer<char_separator<char> > Tok;
         char_separator<char> sep(" "); // default constructed
         unsigned cur = 0;
-	for (unsigned i = 0; i < UserInput.size(); i++){
-	    if (UserInput.at(i) == '#') {
-		UserInput = UserInput.substr(0, i);
-	    }
-	}
-    //std::string tempInput = UserInput.substr(0, UserInput.size() - 1);
+	
+    unsigned numQmarks = 0;
+    bool openQ = false;
+    
+    for (unsigned i = 0; i < UserInput.size(); i++) {
+        if (UserInput.at(i) == '"') {
+            numQmarks++;
+        }
+    }
+    if ((numQmarks % 2) == 1){
+        std::cout << "FOUND UNBALANCED QUOTATION MARKS\n";
+        continue;
+    }
+    numQmarks = 0;
+
         for (unsigned i = 0; i < UserInput.size(); i++){
             if (UserInput.at(i) == '('){
                 left++;
@@ -46,6 +55,17 @@ void Shell::runShell(){
         }
     Tok tok(UserInput, sep);
     for (Tok::iterator it = tok.begin(); it != tok.end(); ++it){
+        for (unsigned n = 0; n < (it -> length()); n++) {
+            if ((it -> at(n)) == '"') {
+                numQmarks++;
+            }
+            if (((numQmarks%2) == 1)) {
+                openQ = true;
+            }
+        }
+        if ( !openQ && ( (*it == "#") || (it -> at(0) == '#') ) ) {
+            break; //found #comment outside of quotation marks
+        }    
         inputSplit.push_back(*it);
     }
         if (left != right){
