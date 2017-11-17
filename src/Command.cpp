@@ -65,7 +65,6 @@ void Command::execute(int &status){
             if ((f.good()) || (dir)){
                 std::cout << "(True)" << std::endl;
                 status = 0;
-                closedir(dir);
                 return;
             }
             else{

@@ -32,7 +32,7 @@ void And::execute(int &status){
     }
         int curState = 0;
         this -> Left -> execute(curState);
-        if (curState != -0){
+        if (curState != 0){
             status = -1;
             return;
         }
