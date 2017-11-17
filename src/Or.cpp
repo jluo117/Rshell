@@ -37,9 +37,6 @@ void Or::execute(int &status){
         status = opt;
         return;
     }
-    else if (opt == 0){
         status = 0;
         return;
-    }
-
 }

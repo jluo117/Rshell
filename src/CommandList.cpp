@@ -12,6 +12,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
     this -> IsConnector = false;
     std::vector<Base*> userCall;
     std::vector<Base*> userInputs;
+    std::vector<std::vector<Base*> > toBreak;
     std::vector<std::string> passInArg;
     std::string quotes;
     bool isTest = false;
@@ -134,7 +135,16 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             if (inputSplit.at(cur).size() == 0){
                 cur++;
             }
-            break;
+            if (!passInArg.empty()){
+                Command *newbase = new Command(passInArg);
+                userInputs.push_back(newbase);
+            }
+            if (!userInputs.empty()){
+                toBreak.push_back(userInputs);
+            }
+            userInputs.clear();
+            passInArg.clear();
+            continue;
         }
         size_t parCheck = inputSplit.at(cur).find(')');
         if (parCheck != std::string::npos){
@@ -167,35 +177,52 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
         Command* newBase = new Command(passInArg);
         userInputs.push_back(newBase);
     }
+    if (!userInputs.empty()){
+        toBreak.push_back(userInputs);
+    }
     passInArg.clear();
-    for (unsigned j = 0; j < userInputs.size(); j++){
-        if (userInputs.at(j) -> IsConnector){
-            if (j == 0){
-                flag = -1;
-                userInputs.at(j) ->fetch_name();
-                return ;
+    for (unsigned i = 0; i < toBreak.size(); i++){
+        std::vector<Base*> input = toBreak.at(i);
+        for (unsigned j = 0; j < input.size(); j++){
+            if (input.at(j) -> IsConnector){
+                if (j == 0){
+                    flag = -1;
+                    input.at(j) ->fetch_name();
+                    return ;
+                }
+                if (j == input.size() -1){
+                    flag = -1;
+                    input.at(j) ->fetch_name();
+                    return;
+                }
+                if (input.at(j - 1) -> IsConnector){
+                    flag = -1;
+                    input.at(j) ->fetch_name();
+                    return;
+                }
+                if (input.at(j + 1) -> IsConnector){
+                    flag = -1;
+                    input.at(j) ->fetch_name();
+                    return;
+                }
             }
-            if (j == userInputs.size() -1){
-                flag = -1;
-                userInputs.at(j) ->fetch_name();
-                return;
-            }
-            if (userInputs.at(j - 1) -> IsConnector){
-                flag = -1;
-                userInputs.at(j) ->fetch_name();
-                return;
-            }
-            if (userInputs.at(j + 1) -> IsConnector){
-                flag = -1;
-                userInputs.at(j) ->fetch_name();
-                return;
+            else{
+                if (j < input.size() -1){
+                    if (!input.at(j + 1) -> IsConnector){
+                        input.at(j+ 1) -> fetch_name();
+                        flag = -1;
+                        return;
+                    }
+                }
             }
         }
+        this -> Actions .push_back(splitBuild(input));
     }
-    this -> Actions = (splitBuild(userInputs));
 }
 CommandList::~CommandList(){
-    delete this -> Actions;
+    for (unsigned i =0; i < this -> Actions.size(); i++){
+        delete this -> Actions.at(i);
+    }
 }
 std::string CommandList:: getColon (std::string input,bool &endPar){
     input = input.substr(0,input.size() -1);
@@ -245,7 +272,9 @@ void CommandList::execute(int &flag){
     if (flag == -1){
         return;
     }
-    Actions -> execute(flag);
+    for (unsigned i = 0; i< this -> Actions.size(); i++){
+        this -> Actions.at(i) -> execute(flag);
+    }
 }
 //junk functions
 void CommandList::add_left(Base* right){}
