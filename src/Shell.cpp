@@ -15,7 +15,7 @@ void Shell::runShell(){
         int right = 0;
         int flag = 0;
 
-        
+
 		std::vector<Base*> userCall;
         std::vector< std::vector<Base*>  >toBreak;
         std::vector<Base*> userInputs;
@@ -27,10 +27,10 @@ void Shell::runShell(){
         typedef tokenizer<char_separator<char> > Tok;
         char_separator<char> sep(" "); // default constructed
         unsigned cur = 0;
-	
+
     unsigned numQmarks = 0;
     bool openQ = false;
-    
+
     for (unsigned i = 0; i < UserInput.size(); i++) {
         if (UserInput.at(i) == '"') {
             numQmarks++;
@@ -51,7 +51,12 @@ void Shell::runShell(){
             }
             if (right > left){
                 flag = -1;
+                std::cout << "warning: Computer does not know what you are asking for" << std::endl;
+                break;
             }
+        }
+        if (flag == -1){
+            continue;
         }
     Tok tok(UserInput, sep);
     for (Tok::iterator it = tok.begin(); it != tok.end(); ++it){
@@ -65,7 +70,7 @@ void Shell::runShell(){
         }
         if ( !openQ && ( (*it == "#") || (it -> at(0) == '#') ) ) {
             break; //found #comment outside of quotation marks
-        }    
+        }
         inputSplit.push_back(*it);
     }
         if (left != right){
