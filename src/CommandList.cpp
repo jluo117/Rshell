@@ -62,7 +62,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             inputSplit.at(cur) = inputSplit.at(cur).substr(1,inputSplit.at(cur).size());
             if (!passInArg.empty()){
                 flag = -1;
-                std::cout << "Your command is invalid.\n go play some World of Warcraft" << std::endl;
+                std::cout << "Warning: invalid command" << std::endl;
                 return;
             }
             passInArg.push_back("test");
