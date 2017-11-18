@@ -49,7 +49,7 @@ void Shell::runShell(){
 
     }
         if (openQ){
-            std::cout << "Warning: unbalanced parenthesis\n" << std::endl;
+            std::cout << "Warning: unbalanced parenthesis" << std::endl;
         }
         for (unsigned i = 0; i < UserInput.size(); i++){
             if (UserInput.at(i) == '('){
@@ -60,7 +60,7 @@ void Shell::runShell(){
             }
             if (right > left){
                 flag = -1;
-                std::cout << "Warning: extra right parenthesis found\n" << std::endl;
+                std::cout << "Warning: extra right parenthesis found" << std::endl;
                 break;
             }
         }
@@ -84,9 +84,9 @@ void Shell::runShell(){
     }
         if (left != right){
 
-            std::cout << "Warning: unbalanced parenthesis \n" << std::endl;
+            std::cout << "Warning: unbalanced parenthesis" << std::endl;
 
-         
+
             flag= -1;
             continue;
         }
