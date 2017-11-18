@@ -48,9 +48,11 @@ void Shell::runShell(){
                 UserInput = UserInput.substr(0, i);
             }
         }
+
         else if (UserInput.at(i) == '('){
             if(!openQ){
                 leftP++;
+
             }
         }
         else if (UserInput.at(i) == ')'){
@@ -62,10 +64,12 @@ void Shell::runShell(){
                     break;
                 }
             }
+
         }
         else if (UserInput.at(i) == '['){
             if (!openQ){
             leftB++;
+
             }
         }
         else if (UserInput.at(i) == ']'){
@@ -91,6 +95,7 @@ void Shell::runShell(){
     for (Tok::iterator it = tok.begin(); it != tok.end(); ++it){
         inputSplit.push_back(*it);
     }
+
         if ( !openQ && (leftP != rightP) ){
             std::cout << "Warning: unbalanced parenthesis" << std::endl;
             flag = -1;
@@ -99,6 +104,7 @@ void Shell::runShell(){
         if ( !openQ && (leftB != rightB) ) {
             std::cout << "Warning: unbalanced brackets" << std::endl;
             flag = -1;
+
             continue;
         }
         if (flag == -1){
