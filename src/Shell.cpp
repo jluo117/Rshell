@@ -74,7 +74,7 @@ void Shell::runShell(){
         inputSplit.push_back(*it);
     }
         if (left != right){
-            std::cout << "Warning: Computer does not know what to do \n preparing to wipe out your hard drive" << std::endl;
+            std::cout << "Warning: " << std::endl;
             flag= -1;
             continue;
         }
