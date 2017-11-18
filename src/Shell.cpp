@@ -11,8 +11,7 @@ Shell::Shell(){
 }
 void Shell::runShell(){
     while(1){
-        int left = 0;
-        int right = 0;
+
         int flag = 0;
 
 		std::vector<Base*> userCall;
@@ -27,8 +26,13 @@ void Shell::runShell(){
         char_separator<char> sep(" "); // default constructed
         unsigned cur = 0;
 
+
     unsigned numQmarks = 0;
     bool openQ = false;
+    int leftP = 0;
+    int rightP = 0;
+    int leftB = 0;
+    int rightB  = 0;
 
     for (unsigned i = 0; i < UserInput.size(); i++) {
         if (UserInput.at(i) == '"'){
@@ -40,54 +44,67 @@ void Shell::runShell(){
             }
         }
         else if (UserInput.at(i) == '#'){
-            if (openQ){
-            }
-            else{
+            if (!openQ){
                 UserInput = UserInput.substr(0, i);
             }
         }
 
+        else if (UserInput.at(i) == '('){
+            if(!openQ){
+                leftP++;
+
+            }
+        }
+        else if (UserInput.at(i) == ')'){
+            if(!openQ){
+                rightP++;
+                if (rightP > leftP){
+                    std::cout << "Warning: extra right parenthesis found" << std::endl;
+                    flag = -1;
+                    break;
+                }
+            }
+
+        }
+        else if (UserInput.at(i) == '['){
+            if (!openQ){
+            leftB++;
+
+            }
+        }
+        else if (UserInput.at(i) == ']'){
+            if(!openQ){
+                rightB++;
+                if (rightB > leftB){
+                    std::cout << "Warning: extra right bracket found" << std::endl;
+                    flag = -1;
+                    break;
+                }
+            }
+        }
     }
-        if (openQ){
-            std::cout << "Warning: unbalanced parenthesis" << std::endl;
-        }
-        for (unsigned i = 0; i < UserInput.size(); i++){
-            if (UserInput.at(i) == '('){
-                left++;
-            }
-            if (UserInput.at(i) == ')'){
-                right++;
-            }
-            if (right > left){
-                flag = -1;
-                std::cout << "Warning: extra right parenthesis found" << std::endl;
-                break;
-            }
-        }
-        if (flag == -1){
-            continue;
-        }
+    if (openQ){
+        std::cout << "Warning: unbalanced quotation marks" << std::endl;
+        continue;
+    }
+    if (flag == -1){
+        continue;
+    }
+    numQmarks = 0;
     Tok tok(UserInput, sep);
     for (Tok::iterator it = tok.begin(); it != tok.end(); ++it){
-        for (unsigned n = 0; n < (it -> length()); n++) {
-            if ((it -> at(n)) == '"') {
-                numQmarks++;
-            }
-            if (((numQmarks%2) == 1)) {
-                openQ = true;
-            }
-        }
-        if ( !openQ && ( (*it == "#") || (it -> at(0) == '#') ) ) {
-            break; //found #comment outside of quotation marks
-        }
         inputSplit.push_back(*it);
     }
-        if (left != right){
 
+        if ( !openQ && (leftP != rightP) ){
             std::cout << "Warning: unbalanced parenthesis" << std::endl;
+            flag = -1;
+            continue;
+        }
+        if ( !openQ && (leftB != rightB) ) {
+            std::cout << "Warning: unbalanced brackets" << std::endl;
+            flag = -1;
 
-
-            flag= -1;
             continue;
         }
         if (flag == -1){

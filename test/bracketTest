@@ -3,9 +3,11 @@ echo testing bracket test
 mkdir -p test1/test2/test3
 [ test1/test2/test3 ] # True
 rmdir -p test1/test2/test3; 
-[test1/test2/test3] #command not found
-echo [ print/whole/line ]
+[test1/test2/test3] 
+echo "[[" ; echo "[]" ; echo "]]" 
 echo "[ AA/BB/CC ] # everything in quotes print"
-echo hello " [ -e d1/d2/d3 ] " # hello [ -e d1/d2/d3 ]
-echo [ "jj/kk/ll" ] # [ jj/kk/ll ]
+echo [ print/whole/line ]  #FAILS
+(echo [ aa//bb/cc ]) ; echo hi #FAILS
+echo hello " [ -e d1/d2/d3 ] " #FAILS
+echo [ "jj/kk/ll" ] # [ jj/kk/ll ] #FAILS
 exit

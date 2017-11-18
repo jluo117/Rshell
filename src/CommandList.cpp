@@ -23,26 +23,35 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
         if (findLoc != (std::string::npos)){
             if (inQuotes){
                 inQuotes = false;
-                recived = regex_replace (recived,quoteReg,"");
+                recived = regex_replace (recived,quoteReg,"$2");
                 quotes += " " + recived;
                 passInArg.push_back(quotes);
                 quotes = "";
             }
             else{
+                unsigned endLoc;
                 unsigned killLoc = findLoc;
                 inQuotes = true;
                 bool anotherQuote = false;
-                for (size_t i = killLoc; i < recived.size(); i++){
+                for (unsigned i = killLoc + 1; i < recived.size(); i++){
                     if (recived.at(i) == '"'){
                         anotherQuote = true;
+                        endLoc = i;
+                        break;
                     }
                 }
                 if (anotherQuote){
                     inQuotes = false;
-                    recived = std::regex_replace (recived,quoteReg,"");
-                    recived = std::regex_replace (recived,quoteReg,"");
+                    recived = std::regex_replace (recived,quoteReg,"$2");
+                    recived = std::regex_replace (recived,quoteReg,"$2");
+                    //passInArg.push_back(recived);
+                    inputSplit.at(cur) = inputSplit.at(cur).substr(endLoc + 1,inputSplit.at(cur).size());
+                    unsigned cutOff = inputSplit.at(cur).size();
+                    recived = recived.substr(0,recived.size() - cutOff);
                     passInArg.push_back(recived);
-                    cur++;
+                    if (cutOff == 0){
+                        cur++;
+                    }
                     continue;
                 }
                 recived = regex_replace (recived,quoteReg,"$2");
@@ -62,7 +71,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             inputSplit.at(cur) = inputSplit.at(cur).substr(1,inputSplit.at(cur).size());
             if (!passInArg.empty()){
                 flag = -1;
-                std::cout << "Your command is invalid.\n go play some World of Warcraft" << std::endl;
+                std::cout << "Warning: invalid command" << std::endl;
                 return;
             }
             passInArg.push_back("test");
