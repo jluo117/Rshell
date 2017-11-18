@@ -32,16 +32,26 @@ void Shell::runShell(){
     bool openQ = false;
 
     for (unsigned i = 0; i < UserInput.size(); i++) {
-        if (UserInput.at(i) == '"') {
-            numQmarks++;
+        if (UserInput.at(i) == '"'){
+            if (openQ){
+                openQ = false;
+            }
+            else{
+                openQ = true;
+            }
         }
-    }
-    if ((numQmarks % 2) == 1){
-        std::cout << "FOUND UNBALANCED QUOTATION MARKS\n";
-        continue;
-    }
-    numQmarks = 0;
+        else if (UserInput.at(i) == '#'){
+            if (openQ){
+            }
+            else{
+                UserInput = UserInput.substr(0, i);
+            }
+        }
 
+    }
+        if (openQ){
+            std::cout << "FOUND UNBALANCED QUOTATION MARKS" << std::endl;
+        }
         for (unsigned i = 0; i < UserInput.size(); i++){
             if (UserInput.at(i) == '('){
                 left++;
