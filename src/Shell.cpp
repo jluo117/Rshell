@@ -15,7 +15,6 @@ void Shell::runShell(){
         int right = 0;
         int flag = 0;
 
-
 		std::vector<Base*> userCall;
         std::vector< std::vector<Base*>  >toBreak;
         std::vector<Base*> userInputs;
@@ -50,7 +49,7 @@ void Shell::runShell(){
 
     }
         if (openQ){
-            std::cout << "FOUND UNBALANCED QUOTATION MARKS" << std::endl;
+            std::cout << "Warning: unbalanced parenthesis\n" << std::endl;
         }
         for (unsigned i = 0; i < UserInput.size(); i++){
             if (UserInput.at(i) == '('){
@@ -61,7 +60,7 @@ void Shell::runShell(){
             }
             if (right > left){
                 flag = -1;
-                std::cout << "warning: Computer does not know what you are asking for" << std::endl;
+                std::cout << "Warning: extra right parenthesis found\n" << std::endl;
                 break;
             }
         }
@@ -84,7 +83,7 @@ void Shell::runShell(){
         inputSplit.push_back(*it);
     }
         if (left != right){
-            std::cout << "Warning: Computer does not know what to do \n preparing to wipe out your hard drive" << std::endl;
+            std::cout << "Warning: unbalanced parenthesis \n" << std::endl;
             flag= -1;
             continue;
         }
@@ -104,8 +103,4 @@ void Shell::runShell(){
     }
     }
 }
-void callError(){
-    std::cout << "Warning: Computer does not know what to do \n preparing to wipe out your hard drive" << std::endl;
-}
-
 
