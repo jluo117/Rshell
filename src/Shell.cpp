@@ -83,7 +83,10 @@ void Shell::runShell(){
         inputSplit.push_back(*it);
     }
         if (left != right){
+
             std::cout << "Warning: unbalanced parenthesis \n" << std::endl;
+
+         
             flag= -1;
             continue;
         }
