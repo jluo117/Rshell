@@ -49,32 +49,39 @@ void Shell::runShell(){
             }
         }
         else if (UserInput.at(i) == '('){
-            leftP++;
+            if(!openQ){
+                leftP++;
+            }
         }
         else if (UserInput.at(i) == ')'){
-            rightP++;
+            if(!openQ){
+                rightP++;
+                if (rightP > leftP){
+                    std::cout << "Warning: extra right parenthesis found" << std::endl;
+                    flag = -1;
+                    break;
+                }
+            }
         }
         else if (UserInput.at(i) == '['){
+            if (!openQ){
             leftB++;
+            }
         }
         else if (UserInput.at(i) == ']'){
-            rightB++;
-        }        
-        // if ( openQ && (rightP > leftP) ) {
-        //     flag = -1;
-        //     std::cout << "Warning: extra right parenthesis found" << std::endl;
-        //     break;
-        // }
-
-        // if ( openQ && (rightB > leftB) ) {
-        //     flag = -1;
-        //     std::cout << "Warning: extra right bracket found" << std::endl;
-        //     break;
-        // }             
+            if(!openQ){
+                rightB++;
+                if (rightB > leftB){
+                    std::cout << "Warning: extra right bracket found" << std::endl;
+                    flag = -1;
+                    break;
+                }
+            }
+        }
     }
     if (openQ){
         std::cout << "Warning: unbalanced quotation marks" << std::endl;
-        break;
+        continue;
     }
     if (flag == -1){
         continue;
@@ -82,17 +89,6 @@ void Shell::runShell(){
     numQmarks = 0;
     Tok tok(UserInput, sep);
     for (Tok::iterator it = tok.begin(); it != tok.end(); ++it){
-        for (unsigned n = 0; n < (it -> length()); n++) {
-            if ((it -> at(n)) == '"') {
-                numQmarks++;
-            }
-            if (((numQmarks%2) == 1)) {
-                openQ = true;
-            }
-        }
-        if ( !openQ && ( (*it == "#") || (it -> at(0) == '#') ) ) {
-            break; //found #comment outside of quotation marks
-        }
         inputSplit.push_back(*it);
     }
         if ( !openQ && (leftP != rightP) ){
