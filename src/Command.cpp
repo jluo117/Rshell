@@ -65,19 +65,19 @@ void Command::execute(int &status){
             if ((f.good()) || (dir)){
                 std::cout << "(True)" << std::endl;
                 status = 0;
-                return;
+                
             }
             else{
                 std::cout << "(False)" << std::endl;
                 status = -1;
-                return;
+                
             }
         }
-        if (Flag == "-f"){
+       else if (Flag == "-f"){
             if ((f.good()) && (!dir)){
                 std::cout << "(True)" << std::endl;
                 status = 0;
-                return;
+                
             }
             else{
                 std::cout << "(False)" << std::endl;
@@ -85,21 +85,28 @@ void Command::execute(int &status){
                 return;
             }
         }
-        if (Flag == "-d"){
+        else if (Flag == "-d"){
            if (dir){
                std::cout << "(True)" << std::endl;
                status = 0;
-               closedir(dir);
-               return;
+               
            }
            else{
                std::cout << "(False)" << std::endl;
                status = -1;
-               return;
+               
            }
         }
-        std::cout << "Invalid command " << std::endl;
-        status = -1;
+        else{
+            std::cout << "Invalid command " << std::endl;
+            status = -1;
+        }
+        if (dir){
+            closedir (dir);
+        }
+        if (f.good()){
+            f.close();
+        }
         return;
     }
 
