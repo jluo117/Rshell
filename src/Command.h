@@ -15,5 +15,8 @@ class Command: public Base{
     public:
         Command(std::vector<std::string> userEnter);
         void execute(int &status);
+    private:
+        bool isDir(char *fileName);
+        bool isFile(char *fileName);
 };
 #endif

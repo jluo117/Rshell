@@ -50,34 +50,32 @@ void Command::execute(int &status){
     }
     else if (CommandCheck == "test"){
         std::string Flag;
-        char *File;
+        char *fileName;
         if (this -> toBlowUp > 2){
             Flag = this -> Args[1];
-            File  =  Args[2];
+            fileName  =  Args[2];
         }
         else{
            Flag = "-e";
-           File = this -> Args[1];
+           fileName = this -> Args[1];
         }
-        std::ifstream f(File);
-        DIR* dir = opendir(File);
         if (Flag == "-e"){
-            if ((f.good()) || (dir)){
+            if ((this -> isDir(fileName)) || this -> isFile(fileName)){
                 std::cout << "(True)" << std::endl;
                 status = 0;
-                
+
             }
             else{
                 std::cout << "(False)" << std::endl;
                 status = -1;
-                
+
             }
         }
        else if (Flag == "-f"){
-            if ((f.good()) && (!dir)){
+            if ((this -> isFile(fileName)) && (!this -> isDir(fileName))){
                 std::cout << "(True)" << std::endl;
                 status = 0;
-                
+
             }
             else{
                 std::cout << "(False)" << std::endl;
@@ -86,26 +84,20 @@ void Command::execute(int &status){
             }
         }
         else if (Flag == "-d"){
-           if (dir){
+           if (this -> isDir(fileName)){
                std::cout << "(True)" << std::endl;
                status = 0;
-               
+
            }
            else{
                std::cout << "(False)" << std::endl;
                status = -1;
-               
+
            }
         }
         else{
             std::cout << "Invalid command " << std::endl;
             status = -1;
-        }
-        if (dir){
-            closedir (dir);
-        }
-        if (f.good()){
-            f.close();
         }
         return;
     }
@@ -126,6 +118,19 @@ void Command::execute(int &status){
         }
     }
 }
+bool Command::isDir(char *fileName){
+    DIR* dir = opendir(fileName);
+    if (dir){
+        closedir(dir);
+        return true;
+    }
+    return false;
+}
+bool Command::isFile(char *fileName){
+    std::ifstream f(fileName);
+    return f.good();
+}
+
 //connection only function
 void Command::add_left(Base* none){
 }
