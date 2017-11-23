@@ -91,7 +91,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
                     if (rightBreak.front() == ';'|| rightBreak.front() == ')'){
                         continue;
                     }
-                
+
                 else{
                     std::cout << rightBreak << " is invalid command" << std::endl;
                     flag = -1;
@@ -134,6 +134,18 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             cur++;
             continue;
         }
+        if (inputSplit.at(cur) == "<"){
+            if (passInArg.size() > 0){
+                Command* newBase = new Command(passInArg);
+                userInputs.push_back(newBase);
+                passInArg.clear();
+            }
+            PipeIn *startPipe = new PipeIn(inputSplit.at(cur + 1));
+            startPipe -> add_left(userInputs.back());
+            cur += 2;
+            userInputs.push_back(startPipe);
+            continue;
+        }
         size_t breakCheck = inputSplit.at(cur).find(';');
         if (breakCheck != std::string::npos){
             std::string toPushIn = inputSplit.at(cur).substr(0,breakCheck);
@@ -169,8 +181,8 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             }
             break;
     }
-        
-    
+
+
         std::string checkPoint =inputSplit.at(cur);
         if (!inputSplit.at(cur).empty()){
         passInArg.push_back(inputSplit.at(cur));
@@ -217,7 +229,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             }
             else{
                 if (j < input.size() -1){
-                    if (!input.at(j + 1) -> IsConnector){
+                    if (!input.at(j + 1) -> IsConnector && !input.at(j + 1) -> IsSpecial){
                         input.at(j+ 1) -> fetch_name();
                         flag = -1;
                         return;
@@ -254,23 +266,34 @@ std::string CommandList::getPar(std::string input){
 
 
 Base* CommandList::splitBuild(std::vector<Base*> &userInputs){
+    Base* rightSpliters;
+    Base* leftSpliters;
     int q = userInputs.size();
     if (q == 1){
         return userInputs.at(0);
     }
     std::vector<Base*> leftSplit;
-    for (int i = 0 ; i < q -2; i++){
-        leftSplit.push_back(userInputs.at(i));
+        for (int i = 0 ; i < q - 2; i++){
+            leftSplit.push_back(userInputs.at(i));
     }
-
-    Base* leftSpliters = splitBuild(leftSplit);
-    Base* rightSpliters = userInputs.at(q-2);
+    if (!leftSplit.empty()){
+        leftSpliters = splitBuild(leftSplit);
+    }
+    else{
+        leftSpliters = userInputs.at(q -1);
+    }
+    if (userInputs.size() > 1){
+    rightSpliters = userInputs.at(q-2);
+    }
+    else{
+        rightSpliters = userInputs.at(q-1);
+    }
     rightSpliters->add_right(userInputs.at(q-1));
     return build(leftSpliters,rightSpliters);
 }
 
 Base* CommandList::build(Base* left, Base* right){
-    if (right -> IsConnector){
+    if (right -> IsConnector|| right -> IsSpecial){
         right -> add_left(left);
         return right;
     }

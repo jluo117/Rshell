@@ -12,7 +12,6 @@ class Command: public Base{
     void add_right(Base*);
     char *Args[200];
     int toBlowUp; //check amount of deletes we need
-    bool pipeMode;
     std::string storeData;
     public:
         Command(std::vector<std::string> userEnter);
@@ -21,7 +20,5 @@ class Command: public Base{
         bool isDir(char *fileName);
         bool isFile(char *fileName);
         bool test();
-        bool cat(char *fileName);
-        bool pipe();
 };
 #endif

@@ -5,6 +5,7 @@
 #include "Command.h"
 #include "Or.h"
 #include "And.h"
+#include "PipeIn.h"
 using namespace boost;
 class CommandList: public Base{
     private:

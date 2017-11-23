@@ -4,6 +4,7 @@ class Base{
     public:
         virtual ~Base(){}
         bool IsConnector;
+        bool IsSpecial = false;
         Base *Left;
         Base *Right;
         virtual void fetch_name ()=0;
