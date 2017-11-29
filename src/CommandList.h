@@ -6,6 +6,8 @@
 #include "Or.h"
 #include "And.h"
 #include "PipeIn.h"
+#include "PipeOut.h"
+#include "ReDirect.h"
 using namespace boost;
 class CommandList: public Base{
     private:
