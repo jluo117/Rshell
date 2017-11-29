@@ -63,6 +63,7 @@ void PipeOut::execute(int &status){
             perror("dup");
             exit(1);
         }
+        exit(0);
     }
     else{
         if (wait(&status) == -1){

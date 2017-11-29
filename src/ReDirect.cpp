@@ -53,6 +53,8 @@ void ReDirect::execute(int &status){
             perror("close");
             exit(1);
         }
+        this -> Right -> execute(status);
+        exit(0);
     }
     else{
         if (wait(&status) == -1){
@@ -61,7 +63,6 @@ void ReDirect::execute(int &status){
             exit(1);
         }
     }
-    this -> Right -> execute(status);
 }
 
 
