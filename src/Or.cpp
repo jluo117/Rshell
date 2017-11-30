@@ -23,17 +23,17 @@ void Or::add_right(Base *right){
 void Or::add_left(Base *left){
     this -> Left = left;
 }
-void Or::execute(int &status){
+void Or::execute(int &status,bool In, bool Out){
     int opt = 0;
     if ((this -> Right == 0) || (this -> Left == 0)){
        std::cout << "missing arguement" << std::endl;
        status = -1;
        return;
    }
-    this -> Left -> execute(opt);
+    this -> Left -> execute(opt,false,false);
     if (opt != 0){
         opt = 0;
-        this -> Right -> execute(opt);
+        this -> Right -> execute(opt,false,false);
         status = opt;
         return;
     }

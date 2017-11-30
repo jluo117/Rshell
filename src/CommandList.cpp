@@ -334,12 +334,12 @@ Base* CommandList::build(Base* left, Base* right){
     left ->add_right(right);
         return left;
 }
-void CommandList::execute(int &flag){
+void CommandList::execute(int &flag,bool In,bool Out){
     if (flag == -1){
         return;
     }
     for (unsigned i = 0; i< this -> Actions.size(); i++){
-        this -> Actions.at(i) -> execute(flag);
+        this -> Actions.at(i) -> execute(flag,false,false);
     }
 }
 //junk functions

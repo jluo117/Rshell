@@ -19,7 +19,7 @@ class CommandList: public Base{
     public:
         CommandList(std::vector<std::string>& inputSplit, unsigned &cur,int layer, int &flag);
         ~CommandList();
-        void execute(int &flag);
+        void execute(int &flag,bool In,bool Out);
         void add_left(Base*);
         void add_right(Base*);
         void fetch_name ();

@@ -119,7 +119,7 @@ void Shell::runShell(){
         //cur++;
     }
     for (unsigned i = 0; i < userInputs.size(); i++){
-        userInputs.at(i) -> execute(flag);
+        userInputs.at(i) -> execute(flag,false,false);
     }
     }
 }

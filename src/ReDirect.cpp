@@ -25,13 +25,13 @@ void ReDirect::add_right(Base *right){
 void ReDirect::add_left(Base *left){
     this -> Left = left;
 }
-void ReDirect::execute(int &status){
+void ReDirect::execute(int &status,bool In,bool Out){
     if ((!this -> Left) || (!this -> Right)){
         std::cout << "parsing error near " << "'|'" <<std::endl;
         status = -1;
         return;
     }
-    this -> Left -> execute(status);
+    this -> Left -> execute(status,true,true);
     int pid = fork();
     if (pid == -1){
         perror("fork");
@@ -53,7 +53,7 @@ void ReDirect::execute(int &status){
             perror("close");
             exit(1);
         }
-        this -> Right -> execute(status);
+        this -> Right -> execute(status,In,Out);
         exit(0);
     }
     else{

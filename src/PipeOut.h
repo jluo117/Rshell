@@ -8,7 +8,7 @@ class PipeOut :public Connector{
         PipeOut(std::string targetFile);
         ~PipeOut();
         void fetch_name();
-        void execute(int &status);
+        void execute(int &status,bool In,bool Out);
         void add_left(Base*);
         void add_right(Base*);
 };

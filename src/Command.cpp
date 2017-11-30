@@ -41,7 +41,7 @@ void Command::fetch_name(){
     std::string UserCall = this -> Args[0];
     std::cout << "Parsing error near " + UserCall << std::endl;
 }
-void Command::execute(int &status){
+void Command::execute(int &status,bool In, bool Out){
     std::string CommandCheck = this -> Args[0];
     if (CommandCheck == "exit"){
     while(1){

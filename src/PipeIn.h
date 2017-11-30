@@ -10,7 +10,7 @@ class PipeIn: public Connector{
     void fetch_name();
     void add_left(Base *left);
     void add_right(Base *right);
-    void execute(int &status);
+    void execute(int &status,bool In,bool Out);
 };
 #endif
 
