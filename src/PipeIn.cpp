@@ -8,9 +8,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include "PipeIn.h"
-PipeIn::PipeIn(std::string fileName){
+PipeIn::PipeIn(std::string filename){
     this -> IsSpecial = true;
-    this -> fileName = fileName;
+    this -> fileName = filename;
 }
 PipeIn::~PipeIn(){
     if (this -> Left){
@@ -24,12 +24,12 @@ void PipeIn::add_left(Base *left){
     this -> Left = left;
 }
 void PipeIn::add_right(Base *right){
-    this -> Right = Right;
+    this -> Right = right;
 }
 void PipeIn::fetch_name(){
     std::cout << "parsing error near < " << std::endl;
 }
-void PipeIn::execute(int &status,bool In, bool Out){
+void PipeIn::execute(int &status,int pipes[],bool In, bool Out){
     if (!this -> Left){
         std::cout << "missing left params" << std::endl;
         status = -1;
@@ -38,8 +38,8 @@ void PipeIn::execute(int &status,bool In, bool Out){
     int pid = fork();
 
     if(pid == -1) {
-		perror("fork");
         status = -1;
+		perror("fork");
 		exit(1);
         return;
 	}
@@ -63,7 +63,7 @@ void PipeIn::execute(int &status,bool In, bool Out){
             exit(1);
             return;
         }
-        this -> Left -> execute(status,In,Out);
+        this -> Left -> execute(status,pipes,In,Out);
         exit(0);
     }
     else {

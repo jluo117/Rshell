@@ -41,7 +41,7 @@ void Command::fetch_name(){
     std::string UserCall = this -> Args[0];
     std::cout << "Parsing error near " + UserCall << std::endl;
 }
-void Command::execute(int &status,bool In, bool Out){
+void Command::execute(int &status,int pipes[],bool In, bool Out){
     std::string CommandCheck = this -> Args[0];
     if (CommandCheck == "exit"){
     while(1){
@@ -60,9 +60,26 @@ void Command::execute(int &status,bool In, bool Out){
         }
         return;
     }
+//     if (In){
+//         close(STDIN_FILENO);
+//         dup(pipes[0]);
+//        }
+//     if (Out){
+//         close(STDOUT_FILENO);
+//         dup(pipes[1]);
+//        }
+
     int pid = fork();
 	//child fuction is running
     if (pid == 0){
+        if (In){
+            close(STDIN_FILENO);
+            dup(pipes[0]);
+        }
+        if (Out){
+            close(STDOUT_FILENO);
+            dup(pipes[1]);
+        }
 		status=execvp(this-> Args[0],this -> Args);
         perror("execvp");
         exit(status);

@@ -24,19 +24,19 @@ void And::add_right(Base *right){
 void And::fetch_name(){
     std::cout<< "parse error near " << "'&&'" << std::endl;
 }
-void And::execute(int &status,bool In,bool Out){
+void And::execute(int &status,int pipes[],bool In,bool Out){
     if ((this -> Right == 0) || (this -> Left == 0)){
         std::cout << "missing arguemnet" << std::endl;
         status = -1;
         return;
     }
         int curState = 0;
-        this -> Left -> execute(curState,false,false);
+        this -> Left -> execute(curState,pipes,false,false);
         if (curState != 0){
             status = -1;
             return;
         }
-        this -> Right -> execute(curState,false,false);
+        this -> Right -> execute(curState,pipes,false,false);
         if (curState != 0){
             status = -1;
             return;

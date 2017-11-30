@@ -9,7 +9,7 @@ class Or: public Connector{
         void fetch_name ();
         void add_right(Base *right);
         void add_left(Base *left);
-        void  execute(int &status,bool In,bool Out);
+        void  execute(int &status,int pipes[],bool In,bool Out);
 };
 
 #endif

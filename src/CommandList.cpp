@@ -179,7 +179,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             }
             continue;
         }
-        
+
         size_t breakCheck = inputSplit.at(cur).find(';');
         if (breakCheck != std::string::npos){
             std::string toPushIn = inputSplit.at(cur).substr(0,breakCheck);
@@ -334,12 +334,12 @@ Base* CommandList::build(Base* left, Base* right){
     left ->add_right(right);
         return left;
 }
-void CommandList::execute(int &flag,bool In,bool Out){
+void CommandList::execute(int &flag,int pipes[],bool In,bool Out){
     if (flag == -1){
         return;
     }
     for (unsigned i = 0; i< this -> Actions.size(); i++){
-        this -> Actions.at(i) -> execute(flag,false,false);
+        this -> Actions.at(i) -> execute(flag,pipes,false,false);
     }
 }
 //junk functions

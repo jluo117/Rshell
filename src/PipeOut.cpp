@@ -30,21 +30,23 @@ void PipeOut::fetch_name(){
     std::cout << "parsing error near > " << std::endl;
 }
 
-void PipeOut::execute(int &status,bool In,bool Out){
+void PipeOut::execute(int &status,int pipes[],bool In,bool Out){
     if (!this -> Left){
         std::cout << "missing left arguement" << std::endl;
         status = -1;
         return;
     }
-    this -> Left -> execute(status,In, Out);
     int pid = fork();
+
     if (pid == -1){
         perror("fork");
         status = -1;
         exit(1);
         return;
     }
+
     else if (pid == 0){
+        this -> Left -> execute(status,pipes,In, true);
         status = open(this -> targetFile.c_str(), O_WRONLY|O_TRUNC);
         if(status == -1) {
 				status = creat(this -> targetFile.c_str(), S_IRUSR|S_IWUSR);

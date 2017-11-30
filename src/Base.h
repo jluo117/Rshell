@@ -8,7 +8,7 @@ class Base{
         Base *Left;
         Base *Right;
         virtual void fetch_name ()=0;
-        virtual void execute(int &status,bool In, bool Out) = 0;
+        virtual void execute(int &status,int pipes[],bool In, bool Out) = 0;
         virtual void add_left(Base*) = 0;
         virtual void add_right(Base*)= 0;
 };

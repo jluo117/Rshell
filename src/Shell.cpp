@@ -111,7 +111,7 @@ void Shell::runShell(){
             continue;
         }
     while (cur < inputSplit.size() ){
-        CommandList *newBase = new CommandList(inputSplit,cur,0,flag);
+        CommandList *newBase = new CommandList(inputSplit,cur,2,flag);
         userInputs.push_back(newBase);
         if (flag == -1){
            break;
@@ -119,7 +119,8 @@ void Shell::runShell(){
         //cur++;
     }
     for (unsigned i = 0; i < userInputs.size(); i++){
-        userInputs.at(i) -> execute(flag,false,false);
+        int pipes [2];
+        userInputs.at(i) -> execute(flag,pipes,false,false);
     }
     }
 }
