@@ -74,11 +74,10 @@ void Command::execute(int &status,int pipes[],bool In, bool Out){
     if (pid == 0){
         if (In){
             close(STDIN_FILENO);
-            dup(pipes[0]);
+            dup2(pipes[0],0);
         }
         if (Out){
-            close(STDOUT_FILENO);
-            dup(pipes[1]);
+             dup2(pipes[1],1);
         }
 		status=execvp(this-> Args[0],this -> Args);
         perror("execvp");

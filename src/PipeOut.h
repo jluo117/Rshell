@@ -3,7 +3,7 @@
 #include <string>
 #include "Connector.h"
 class PipeOut :public Connector{
-    std::string targetFile;
+    std::string fileName;
     public:
         PipeOut(std::string targetFile);
         ~PipeOut();

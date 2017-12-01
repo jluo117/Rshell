@@ -9,7 +9,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 PipeOut::PipeOut(std::string targetFile){
-    this -> targetFile = targetFile;
+    this -> fileName = targetFile;
     this -> IsSpecial = true;
 }
 PipeOut::~PipeOut(){
@@ -36,43 +36,7 @@ void PipeOut::execute(int &status,int pipes[],bool In,bool Out){
         status = -1;
         return;
     }
-    int pid = fork();
-
-    if (pid == -1){
-        perror("fork");
-        status = -1;
-        exit(1);
-        return;
-    }
-
-    else if (pid == 0){
-        this -> Left -> execute(status,pipes,In, true);
-        status = open(this -> targetFile.c_str(), O_WRONLY|O_TRUNC);
-        if(status == -1) {
-				status = creat(this -> targetFile.c_str(), S_IRUSR|S_IWUSR);
-        }
-        if(status == -1) {
-            perror("creat");
-            exit(1);
-        }
-        if(close(1)) {
-            status = -1;
-            perror("close");
-            exit(1);
-        }
-        if(dup(status) == -1) {
-            status = -1;
-            perror("dup");
-            exit(1);
-        }
-        exit(0);
-    }
-    else{
-        if (wait(&status) == -1){
-            status = -1;
-            perror("wait");
-            return;
-        }
-    }
+        pipes[1] = open(this -> fileName.c_str(),O_WRONLY| O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+        this -> Left -> execute(status,pipes,In,true);
 }
 
