@@ -1,4 +1,6 @@
 language: cpp
-script: make
-
+script:
+linux.gcc.boost.install
+make
+compiler: gcc
 
