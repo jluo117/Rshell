@@ -1,6 +1,5 @@
 language: cpp
-script:
-linux.gcc.boost.install
-make
+before_install: sudo apt-get install libboost-dev
+script: make
 compiler: gcc
 
