@@ -27,7 +27,6 @@ void Shell::runShell(){
         unsigned cur = 0;
 
 
-    unsigned numQmarks = 0;
     bool openQ = false;
     int leftP = 0;
     int rightP = 0;
