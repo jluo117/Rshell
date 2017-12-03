@@ -4,4 +4,8 @@ before_install:
     -   sudo apt-get install libboost-dev
 script: make
 compiler: gcc
-
+notifications:
+  email:
+    recipients:
+      - luojames52@gmail.com
+      - kqluu9715@gmail.com
