@@ -23,7 +23,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
         if (findLoc != (std::string::npos)){
             if (inQuotes){
                 inQuotes = false;
-                recived = regex_replace (recived,quoteReg,"$2");
+                recived = regex_replace (recived,quoteReg,std::string(""));
                 quotes += " " + recived;
                 passInArg.push_back(quotes);
                 quotes = "";
