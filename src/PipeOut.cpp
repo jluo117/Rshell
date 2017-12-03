@@ -8,9 +8,10 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-PipeOut::PipeOut(std::string targetFile){
+PipeOut::PipeOut(std::string targetFile,bool append){
     this -> fileName = targetFile;
     this -> IsSpecial = true;
+    this -> append = append;
 }
 PipeOut::~PipeOut(){
     if (this -> Left){
@@ -36,7 +37,12 @@ void PipeOut::execute(int &status,int pipes[],bool In,bool Out){
         status = -1;
         return;
     }
+    if (this -> append){
+        pipes[1] = open(this -> fileName.c_str(),O_WRONLY| O_APPEND | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+    }
+    else{
         pipes[1] = open(this -> fileName.c_str(),O_WRONLY| O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+    }
         this -> Left -> execute(status,pipes,In,true);
 }
 

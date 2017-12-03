@@ -4,8 +4,9 @@
 #include "Connector.h"
 class PipeOut :public Connector{
     std::string fileName;
+    bool append;
     public:
-        PipeOut(std::string targetFile);
+        PipeOut(std::string targetFile,bool append);
         ~PipeOut();
         void fetch_name();
         void execute(int &status,int pipes[], bool In,bool Out);

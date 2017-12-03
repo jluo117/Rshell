@@ -89,7 +89,6 @@ void Shell::runShell(){
     if (flag == -1){
         continue;
     }
-    numQmarks = 0;
     Tok tok(UserInput, sep);
     for (Tok::iterator it = tok.begin(); it != tok.end(); ++it){
         inputSplit.push_back(*it);
