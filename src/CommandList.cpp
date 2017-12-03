@@ -42,8 +42,8 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
                 }
                 if (anotherQuote){
                     inQuotes = false;
-                    recived = std::regex_replace (recived,quoteReg,"$2");
-                    recived = std::regex_replace (recived,quoteReg,"$2");
+                    recived = std::regex_replace (recived,quoteReg,std::string(""));
+                    recived = std::regex_replace (recived,quoteReg,std::string(""));
                     //passInArg.push_back(recived);
                     inputSplit.at(cur) = inputSplit.at(cur).substr(endLoc + 1,inputSplit.at(cur).size());
                     unsigned cutOff = inputSplit.at(cur).size();
@@ -54,7 +54,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
                     }
                     continue;
                 }
-                recived = regex_replace (recived,quoteReg,"$2");
+                recived = regex_replace (recived,quoteReg,std::string(""));
                 quotes = recived;
                 cur++;
                 continue;
