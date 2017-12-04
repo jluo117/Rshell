@@ -2,7 +2,9 @@ language: cpp
 before_install:
     -   sudo apt-get update
     -   sudo apt-get install libboost-dev
-script: make
+script:
+    -   make
+    -   ./bin/rshell < pipeTest
 compiler: gcc
 notifications:
   email:
