@@ -1,7 +1,0 @@
-echo hi > bob
-cat < bob | tee bob
-echo fail >> > tttt #this should fail
-cat < bob < tttt | tee hi
-touch tttt
-cat < bob < tttt | tee hi
-rm tttt

@@ -18,6 +18,9 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
     bool isTest = false;
     bool inQuotes = false;
     while (cur < inputSplit.size()){
+        if (flag == -1){
+            return;
+        }
         std::string recived= inputSplit.at(cur);
         size_t findLoc = recived.find('"');
         if (findLoc != (std::string::npos)){
@@ -170,14 +173,10 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             }
             PipeOut *endPipe = new PipeOut(inputSplit.at(cur + 1),false);
             cur += 2;
+            
             if (!userInputs.empty()){
-                if (userInputs.back() -> IsSpecial){
-                    flag = -1;
-                    std::cout << "double pipe out detected" << std::endl;
-                    return;
-                }
-            endPipe -> add_left(userInputs.back());
-            userInputs.back() = endPipe;
+                endPipe -> add_left(userInputs.back());
+                userInputs.back() = endPipe;
             }
             else{
                 userInputs.push_back(endPipe);
@@ -186,20 +185,16 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
         }
        if (inputSplit.at(cur) == ">>"){
             if (passInArg.size() > 0){
-                if (userInputs.back() -> IsSpecial){
-                    flag = -1;
-                    std::cout << "double pipe out detected" << std::endl;
-                    return;
-                }
                 Command* newBase = new Command(passInArg);
                 userInputs.push_back(newBase);
                 passInArg.clear();
             }
+           
             PipeOut *endPipe = new PipeOut(inputSplit.at(cur + 1),true);
             cur += 2;
             if (!userInputs.empty()){
-            endPipe -> add_left(userInputs.back());
-            userInputs.back() = endPipe;
+                endPipe -> add_left(userInputs.back());
+                userInputs.back() = endPipe;
             }
             else{
                 userInputs.push_back(endPipe);

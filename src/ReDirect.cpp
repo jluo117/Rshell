@@ -31,37 +31,21 @@ void ReDirect::execute(int &status,int pipes[],bool In,bool Out){
         status = -1;
         return;
     }
-    int pid = fork();
-    if (pid == -1){
-        perror("fork");
+    if (pipe(pipes) == -1){
+        perror("pipe");
         status = -1;
-        exit(1);
+        return;
     }
-    else if (pid == 0){
-        if(pipe(pipes) == -1) {
-            perror("pipe");
-            exit(1);
-        }
-        this -> Left -> execute(status,pipes,false,true);
+    this -> Left -> execute(status,pipes,false,true);
+     close(pipes[1]);
 
-        if(dup2(pipes[0],0) == -1) {
-            status = -1;
-            perror("dup2");
-            exit(1);
-        }
-        if(close(pipes[1]) == -1) {
-            status = -1;
-            perror("close");
-            exit(1);
-        }
-        this -> Right -> execute(status,pipes,true,Out);
-        exit(0);
+    if (status == -1){
+        return;
     }
-    else{
-        if (waitpid(pid,&status,0) == -1){
-            status = -1;
-            perror("wait");
-        }
+    this -> Right -> execute(status,pipes,true,Out);
+    close(pipes[0]);
+    if (status == -1){
+        return;
     }
 }
 

@@ -4,6 +4,7 @@ class Base{
     public:
         virtual ~Base(){}
         bool IsConnector;
+        bool Double = false;
         bool IsSpecial = false;
         Base *Left;
         Base *Right;
