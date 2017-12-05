@@ -5,6 +5,9 @@
 #include "Command.h"
 #include "Or.h"
 #include "And.h"
+#include "PipeIn.h"
+#include "PipeOut.h"
+#include "ReDirect.h"
 using namespace boost;
 class CommandList: public Base{
     private:
@@ -16,7 +19,7 @@ class CommandList: public Base{
     public:
         CommandList(std::vector<std::string>& inputSplit, unsigned &cur,int layer, int &flag);
         ~CommandList();
-        void execute(int &flag);
+        void execute(int &flag,int pipes[],bool In,bool Out);
         void add_left(Base*);
         void add_right(Base*);
         void fetch_name ();

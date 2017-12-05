@@ -18,12 +18,15 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
     bool isTest = false;
     bool inQuotes = false;
     while (cur < inputSplit.size()){
+        if (flag == -1){
+            return;
+        }
         std::string recived= inputSplit.at(cur);
         size_t findLoc = recived.find('"');
         if (findLoc != (std::string::npos)){
             if (inQuotes){
                 inQuotes = false;
-                recived = regex_replace (recived,quoteReg,"$2");
+                recived = regex_replace (recived,quoteReg,std::string(""));
                 quotes += " " + recived;
                 passInArg.push_back(quotes);
                 quotes = "";
@@ -42,8 +45,8 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
                 }
                 if (anotherQuote){
                     inQuotes = false;
-                    recived = std::regex_replace (recived,quoteReg,"$2");
-                    recived = std::regex_replace (recived,quoteReg,"$2");
+                    recived = std::regex_replace (recived,quoteReg,std::string(""));
+                    recived = std::regex_replace (recived,quoteReg,std::string(""));
                     //passInArg.push_back(recived);
                     inputSplit.at(cur) = inputSplit.at(cur).substr(endLoc + 1,inputSplit.at(cur).size());
                     unsigned cutOff = inputSplit.at(cur).size();
@@ -54,7 +57,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
                     }
                     continue;
                 }
-                recived = regex_replace (recived,quoteReg,"$2");
+                recived = regex_replace (recived,quoteReg,std::string(""));
                 quotes = recived;
                 cur++;
                 continue;
@@ -91,7 +94,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
                     if (rightBreak.front() == ';'|| rightBreak.front() == ')'){
                         continue;
                     }
-                
+
                 else{
                     std::cout << rightBreak << " is invalid command" << std::endl;
                     flag = -1;
@@ -110,6 +113,17 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             userInputs.push_back(newBase);
 
             //cur++;
+            continue;
+        }
+        if (inputSplit.at(cur) == "|"){
+            if (passInArg.size() > 0){
+                Command* newBase = new Command(passInArg);
+                passInArg.clear();
+                userInputs.push_back(newBase);
+            }
+            ReDirect *newReDirect = new ReDirect;
+            userInputs.push_back(newReDirect);
+            cur++;
             continue;
         }
         if (inputSplit.at(cur) == "||") {
@@ -134,6 +148,60 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             cur++;
             continue;
         }
+        if (inputSplit.at(cur) == "<"){
+            if (passInArg.size() > 0){
+                Command* newBase = new Command(passInArg);
+                userInputs.push_back(newBase);
+                passInArg.clear();
+            }
+            PipeIn *startPipe = new PipeIn(inputSplit.at(cur + 1));
+            if (!userInputs.empty()){
+            startPipe -> add_left(userInputs.back());
+            userInputs.back() = startPipe;
+            }
+            else{
+                userInputs.push_back(startPipe);
+            }
+            cur += 2;
+            continue;
+        }
+        if (inputSplit.at(cur) == ">"){
+            if (passInArg.size() > 0){
+                Command* newBase = new Command(passInArg);
+                userInputs.push_back(newBase);
+                passInArg.clear();
+            }
+            PipeOut *endPipe = new PipeOut(inputSplit.at(cur + 1),false);
+            cur += 2;
+            
+            if (!userInputs.empty()){
+                endPipe -> add_left(userInputs.back());
+                userInputs.back() = endPipe;
+            }
+            else{
+                userInputs.push_back(endPipe);
+            }
+            continue;
+        }
+       if (inputSplit.at(cur) == ">>"){
+            if (passInArg.size() > 0){
+                Command* newBase = new Command(passInArg);
+                userInputs.push_back(newBase);
+                passInArg.clear();
+            }
+           
+            PipeOut *endPipe = new PipeOut(inputSplit.at(cur + 1),true);
+            cur += 2;
+            if (!userInputs.empty()){
+                endPipe -> add_left(userInputs.back());
+                userInputs.back() = endPipe;
+            }
+            else{
+                userInputs.push_back(endPipe);
+            }
+            continue;
+        }
+
         size_t breakCheck = inputSplit.at(cur).find(';');
         if (breakCheck != std::string::npos){
             std::string toPushIn = inputSplit.at(cur).substr(0,breakCheck);
@@ -169,8 +237,8 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             }
             break;
     }
-        
-    
+
+
         std::string checkPoint =inputSplit.at(cur);
         if (!inputSplit.at(cur).empty()){
         passInArg.push_back(inputSplit.at(cur));
@@ -217,7 +285,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             }
             else{
                 if (j < input.size() -1){
-                    if (!input.at(j + 1) -> IsConnector){
+                    if (!input.at(j + 1) -> IsConnector && !input.at(j + 1) -> IsSpecial){
                         input.at(j+ 1) -> fetch_name();
                         flag = -1;
                         return;
@@ -254,17 +322,28 @@ std::string CommandList::getPar(std::string input){
 
 
 Base* CommandList::splitBuild(std::vector<Base*> &userInputs){
+    Base* rightSpliters;
+    Base* leftSpliters;
     int q = userInputs.size();
     if (q == 1){
         return userInputs.at(0);
     }
     std::vector<Base*> leftSplit;
-    for (int i = 0 ; i < q -2; i++){
-        leftSplit.push_back(userInputs.at(i));
+        for (int i = 0 ; i < q - 2; i++){
+            leftSplit.push_back(userInputs.at(i));
     }
-
-    Base* leftSpliters = splitBuild(leftSplit);
-    Base* rightSpliters = userInputs.at(q-2);
+    if (!leftSplit.empty()){
+        leftSpliters = splitBuild(leftSplit);
+    }
+    else{
+        leftSpliters = userInputs.at(q -1);
+    }
+    if (userInputs.size() > 1){
+    rightSpliters = userInputs.at(q-2);
+    }
+    else{
+        rightSpliters = userInputs.at(q-1);
+    }
     rightSpliters->add_right(userInputs.at(q-1));
     return build(leftSpliters,rightSpliters);
 }
@@ -277,12 +356,12 @@ Base* CommandList::build(Base* left, Base* right){
     left ->add_right(right);
         return left;
 }
-void CommandList::execute(int &flag){
+void CommandList::execute(int &flag,int pipes[],bool In,bool Out){
     if (flag == -1){
         return;
     }
     for (unsigned i = 0; i< this -> Actions.size(); i++){
-        this -> Actions.at(i) -> execute(flag);
+        this -> Actions.at(i) -> execute(flag,pipes,false,false);
     }
 }
 //junk functions

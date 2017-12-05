@@ -12,8 +12,13 @@ class Command: public Base{
     void add_right(Base*);
     char *Args[200];
     int toBlowUp; //check amount of deletes we need
+    std::string storeData;
     public:
         Command(std::vector<std::string> userEnter);
-        void execute(int &status);
+        void execute(int &status,int pipes[],bool In,bool Out);
+    private:
+        bool isDir(char *fileName);
+        bool isFile(char *fileName);
+        bool test();
 };
 #endif

@@ -27,7 +27,6 @@ void Shell::runShell(){
         unsigned cur = 0;
 
 
-    unsigned numQmarks = 0;
     bool openQ = false;
     int leftP = 0;
     int rightP = 0;
@@ -90,7 +89,6 @@ void Shell::runShell(){
     if (flag == -1){
         continue;
     }
-    numQmarks = 0;
     Tok tok(UserInput, sep);
     for (Tok::iterator it = tok.begin(); it != tok.end(); ++it){
         inputSplit.push_back(*it);
@@ -111,15 +109,19 @@ void Shell::runShell(){
             continue;
         }
     while (cur < inputSplit.size() ){
-        CommandList *newBase = new CommandList(inputSplit,cur,0,flag);
+        CommandList *newBase = new CommandList(inputSplit,cur,2,flag);
         userInputs.push_back(newBase);
         if (flag == -1){
            break;
         }
         //cur++;
     }
+    if (flag == -1){
+        continue;
+    }
     for (unsigned i = 0; i < userInputs.size(); i++){
-        userInputs.at(i) -> execute(flag);
+        int pipes [2];
+        userInputs.at(i) -> execute(flag,pipes,false,false);
     }
     }
 }

@@ -1,14 +1,16 @@
-#ifndef AND_H
-#define AND_H
+#ifndef PIPE_H
+#define PIPE_H
+#include <string>
 #include "Connector.h"
-class And :public Connector{
+class PipeIn: public Connector{
+    std::string fileName;
     public:
-    And();
-    And(Base *left);
-    ~And();
+    PipeIn(std::string filename);
+    ~PipeIn();
     void fetch_name();
     void add_left(Base *left);
     void add_right(Base *right);
     void execute(int &status,int pipes[],bool In,bool Out);
 };
 #endif
+
