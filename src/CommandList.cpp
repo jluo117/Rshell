@@ -173,7 +173,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
             }
             PipeOut *endPipe = new PipeOut(inputSplit.at(cur + 1),false);
             cur += 2;
-            
+
             if (!userInputs.empty()){
                 endPipe -> add_left(userInputs.back());
                 userInputs.back() = endPipe;
@@ -189,7 +189,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
                 userInputs.push_back(newBase);
                 passInArg.clear();
             }
-           
+
             PipeOut *endPipe = new PipeOut(inputSplit.at(cur + 1),true);
             cur += 2;
             if (!userInputs.empty()){

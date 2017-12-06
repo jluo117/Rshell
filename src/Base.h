@@ -3,7 +3,7 @@
 class Base{
     public:
         virtual ~Base(){}
-        bool IsConnector;
+        bool IsConnector = false;
         bool Double = false;
         bool IsSpecial = false;
         Base *Left;

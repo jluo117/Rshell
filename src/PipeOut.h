@@ -2,7 +2,7 @@
 #define PIPEOUT_H
 #include <string>
 #include "Connector.h"
-class PipeOut :public Connector{
+class PipeOut :public Base{
     std::string fileName;
     bool append;
     public:

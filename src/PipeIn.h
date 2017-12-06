@@ -2,7 +2,7 @@
 #define PIPE_H
 #include <string>
 #include "Connector.h"
-class PipeIn: public Connector{
+class PipeIn: public Base{
     std::string fileName;
     public:
     PipeIn(std::string filename);
