@@ -32,22 +32,26 @@ void PipeOut::fetch_name(){
 }
 
 void PipeOut::execute(int &status,int pipes[],bool In,bool Out){
+    int passInPipe = pipes[1];
     if (Out){
-        this -> Left -> execute(status, pipes, In, true);
+        passInPipe = pipes[1];
     }
-    else{
-        if (!this -> Left){
+    if (!this -> Left){
             std::cout << "missing left arguement" << std::endl;
             status = -1;
             return;
         }
-        if (this -> append){
+    if (this -> append){
             pipes[1] = open(this -> fileName.c_str(),O_WRONLY| O_APPEND | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
         }
-        else{
+    else{
             pipes[1] = open(this -> fileName.c_str(),O_WRONLY| O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
-        }
+    }
+    this -> Left -> execute(status,pipes,In,true);
+    if (Out){
+        pipes[1] = passInPipe;
         this -> Left -> execute(status,pipes,In,true);
     }
 }
+
 
