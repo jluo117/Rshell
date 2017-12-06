@@ -77,7 +77,7 @@ void Command::execute(int &status,int pipes[],bool In, bool Out){
             dup2(pipes[0],0);
         }
         if (Out){
-            dup2(pipes[1],STDOUT_FILENO);
+            dup2(pipes[1],1);
         }
 		status=execvp(this-> Args[0],this -> Args);
         perror("execvp");

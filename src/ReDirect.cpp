@@ -31,21 +31,27 @@ void ReDirect::execute(int &status,int pipes[],bool In,bool Out){
         status = -1;
         return;
     }
-    if (pipe(pipes) == -1){
-        perror("pipe");
-        status = -1;
-        return;
+    if (Out){
+        this -> Left -> execute(status,pipes,false,true);
+        close(pipes[1]);
+        this -> Right -> execute(status,pipes,true,true);
     }
-    this -> Left -> execute(status,pipes,false,true);
-     close(pipes[1]);
-
-    if (status == -1){
-        return;
-    }
-    this -> Right -> execute(status,pipes,true,Out);
-    close(pipes[0]);
-    if (status == -1){
-        return;
+    else{
+        if (pipe(pipes) == -1){
+            perror("pipe");
+            status = -1;
+            return;
+        }
+        this -> Left -> execute(status,pipes,false,true);
+        close(pipes[1]);
+            if (status == -1){
+                return;
+            }
+            this -> Right -> execute(status,pipes,true,Out);
+            close(pipes[0]);
+            if (status == -1){
+                return;
+            }
     }
 }
 
