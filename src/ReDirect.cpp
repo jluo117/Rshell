@@ -58,6 +58,7 @@ void ReDirect::execute(int &status,int pipes[],bool In,bool Out,int &size){
         for (int i = curSize; i < size; i++){
             newPipe[i] = tempPipe[i];
         }
+        pipes = newPipe;
     }
     else{
         this -> Right -> execute(status,tempPipe,true,Out,size);
