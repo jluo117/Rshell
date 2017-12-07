@@ -41,7 +41,7 @@ void Command::fetch_name(){
     std::string UserCall = this -> Args[0];
     std::cout << "Parsing error near " + UserCall << std::endl;
 }
-void Command::execute(int &status,int pipes[],bool In, bool Out){
+void Command::execute(int &status,int pipes[],bool In, bool Out, int &size){
     std::string CommandCheck = this -> Args[0];
     if (CommandCheck == "exit"){
     while(1){
@@ -77,7 +77,7 @@ void Command::execute(int &status,int pipes[],bool In, bool Out){
             dup2(pipes[0],0);
         }
         if (Out){
-            dup2(pipes[1],1);
+            dup2(pipes[1],STDOUT_FILENO);
         }
 		status=execvp(this-> Args[0],this -> Args);
         perror("execvp");

@@ -356,12 +356,13 @@ Base* CommandList::build(Base* left, Base* right){
     left ->add_right(right);
         return left;
 }
-void CommandList::execute(int &flag,int pipes[],bool In,bool Out){
+void CommandList::execute(int &flag,int pipes[],bool In,bool Out,int &size){
     if (flag == -1){
         return;
     }
     for (unsigned i = 0; i< this -> Actions.size(); i++){
-        this -> Actions.at(i) -> execute(flag,pipes,false,false);
+        size = 0;
+        this -> Actions.at(i) -> execute(flag,pipes,false,false,size);
     }
 }
 //junk functions

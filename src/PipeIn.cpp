@@ -30,15 +30,17 @@ void PipeIn::add_right(Base *right){
 void PipeIn::fetch_name(){
     std::cout << "parsing error near < " << std::endl;
 }
-void PipeIn::execute(int &status,int pipes[],bool In, bool Out){
-    
+void PipeIn::execute(int &status,int pipes[],bool In, bool Out, int &size){
+    if (size == 0){
+        size = 2;
+    }
     if (!this -> Left){
         std::cout << "missing left params" << std::endl;
         status = -1;
         return;
     }
     if (this -> Left -> Double){
-        this -> Left -> execute(status,pipes,In,Out);
+        this -> Left -> execute(status,pipes,In,Out,size);
     }
     else{
         int pid = fork();
@@ -69,7 +71,7 @@ void PipeIn::execute(int &status,int pipes[],bool In, bool Out){
                 exit(1);
                 return;
             }
-            this -> Left -> execute(status,pipes,In,Out);
+            this -> Left -> execute(status,pipes,In,Out,size);
             exit(0);
         }
         else {

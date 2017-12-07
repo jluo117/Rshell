@@ -25,33 +25,46 @@ void ReDirect::add_right(Base *right){
 void ReDirect::add_left(Base *left){
     this -> Left = left;
 }
-void ReDirect::execute(int &status,int pipes[],bool In,bool Out){
+void ReDirect::execute(int &status,int pipes[],bool In,bool Out,int &size){
     if ((!this -> Left) || (!this -> Right)){
         std::cout << "parsing error near " << "'|'" <<std::endl;
         status = -1;
         return;
     }
-    if (Out){
-        this -> Left -> execute(status,pipes,false,true);
-        close(pipes[1]);
-        this -> Right -> execute(status,pipes,true,true);
-    }
-    else{
-        if (pipe(pipes) == -1){
+    int tempPipe [2];
+
+    if (pipe(tempPipe) == -1){
             perror("pipe");
             status = -1;
             return;
+    }
+    int curSize = size;
+    this -> Left -> execute(status,tempPipe,false,true,size);
+
+    close(tempPipe[1]);
+    if (status == -1){
+        return;
+    }
+    if (Out){
+        close(STDIN_FILENO);
+        close(STDOUT_FILENO);
+        size += 2;
+        pipes[1] = tempPipe[0];
+        this -> Right -> execute(status,pipes,true,true,size);
+        int newPipe[20];
+        for (int i = 0; i < curSize; i++){
+            newPipe[i] = pipes[i];
         }
-        this -> Left -> execute(status,pipes,false,true);
-        close(pipes[1]);
-            if (status == -1){
-                return;
-            }
-            this -> Right -> execute(status,pipes,true,Out);
-            close(pipes[0]);
-            if (status == -1){
-                return;
-            }
+        for (int i = curSize; i < size; i++){
+            newPipe[i] = tempPipe[i];
+        }
+    }
+    else{
+        this -> Right -> execute(status,tempPipe,true,Out,size);
+    }
+    close(tempPipe[0]);
+    if (status == -1){
+        return;
     }
 }
 

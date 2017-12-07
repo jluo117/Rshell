@@ -31,7 +31,7 @@ void PipeOut::fetch_name(){
     std::cout << "parsing error near > " << std::endl;
 }
 
-void PipeOut::execute(int &status,int pipes[],bool In,bool Out){
+void PipeOut::execute(int &status,int pipes[],bool In,bool Out, int &size){
     int passInPipe = pipes[1];
     if (Out){
         passInPipe = pipes[1];
@@ -47,10 +47,10 @@ void PipeOut::execute(int &status,int pipes[],bool In,bool Out){
     else{
             pipes[1] = open(this -> fileName.c_str(),O_WRONLY| O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
     }
-    this -> Left -> execute(status,pipes,In,true);
+    this -> Left -> execute(status,pipes,In,true,size);
     if (Out){
         pipes[1] = passInPipe;
-        this -> Left -> execute(status,pipes,In,true);
+        this -> Left -> execute(status,pipes,In,true,size);
     }
 }
 
