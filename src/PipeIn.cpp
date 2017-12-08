@@ -86,8 +86,51 @@ void PipeIn::toStack(std::stack <Base*> &stacker){
     stacker.push(this);
 }
 void PipeIn::execute(){
-    int stat;
-    stat = open(this -> fileName.c_str(), O_RDONLY);
-    dup(stat);
-    this -> Left -> execute();
+    int status = 0;
+    int size = 0;
+    int newPipe[2];
+    int file = open (this -> fileName.c_str(), O_RDONLY);
+    if (file == -1){
+        return;
+    }
+    int pid = fork();
+
+        if(pid == -1) {
+            status = -1;
+            perror("fork");
+            exit(1);
+            return;
+        }
+        else if(pid == 0) {
+            newPipe[1] = open(this -> fileName.c_str(), O_RDONLY);
+            if(status == -1) {
+                status = -1;
+                perror("open");
+                exit(1);
+                return;
+            }
+            if(close(0)) {
+                status = -1;
+                perror("close");
+                exit(1);
+                return;
+            }
+            if(dup(newPipe[1]) == -1) {
+                status = -1;
+                perror("dup");
+                exit(1);
+                return;
+            }
+            close(newPipe[0]);
+            this -> Left -> execute(status,newPipe,true,true,size);
+            this -> outDir = newPipe[0];
+            exit(0);
+        }
+        else {
+            if(wait(&status) == -1)
+                perror("wait");
+                return;
+        }
 }
+
+

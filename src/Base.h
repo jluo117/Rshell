@@ -3,7 +3,8 @@
 #include <stack>
 class Base{
     public:
-        int backPipe[2];
+        int inDir;
+        int outDir;
         virtual ~Base(){}
         bool IsConnector = false;
         bool Double = false;

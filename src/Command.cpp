@@ -74,7 +74,6 @@ void Command::execute(int &status,int pipes[],bool In, bool Out, int &size){
 	//child fuction is running
     if (pid == 0){
         if (In || Out){
-            dup2(pipes[1],1);
             dup2(pipes[0],0);
         }
 		status=execvp(this-> Args[0],this -> Args);

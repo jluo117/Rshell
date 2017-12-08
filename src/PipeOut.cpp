@@ -60,19 +60,29 @@ void PipeOut::toStack(std::stack <Base*> &stacker){
 }
 
 void PipeOut::execute(){
-    int status = 0;
-    int size = 0;
-    int passInPipe[2];
-    pipe(passInPipe);
+    int pid;
+    int newPipe[2];
+    pipe(newPipe);
     if (this -> append){
-            passInPipe[1] = open(this -> fileName.c_str(),O_WRONLY| O_APPEND | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+            newPipe[1] = open(this -> fileName.c_str(),O_WRONLY| O_APPEND | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
         }
     else{
-            passInPipe[1] = open(this -> fileName.c_str(),O_WRONLY| O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+            newPipe[1] = open(this -> fileName.c_str(),O_WRONLY| O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
     }
-    passInPipe[0] = this -> backPipe[1];
-    this -> Left -> execute(status,passInPipe,true,true,size);
-    this -> Left -> execute();
+    if((pid = fork()) == -1){
+        exit(EXIT_FAILURE);
+    }
+    else if (pid == 0){
+        dup2(this -> inDir,0);
+        dup2(newPipe[1],1);
+        close(newPipe[0]);
+        this -> Left -> execute();
+        exit(EXIT_FAILURE);
+    }
+    else{
+        wait(NULL);
+        close(newPipe[1]);
+    }
 }
 
 
