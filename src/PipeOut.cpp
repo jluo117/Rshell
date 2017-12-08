@@ -32,7 +32,7 @@ void PipeOut::fetch_name(){
 }
 
 void PipeOut::execute(int &status,int pipes[],bool In,bool Out, int &size){
-    int passInPipe = pipes[1];
+    int passInPipe;
     if (Out){
         passInPipe = pipes[1];
     }
@@ -48,6 +48,7 @@ void PipeOut::execute(int &status,int pipes[],bool In,bool Out, int &size){
             pipes[1] = open(this -> fileName.c_str(),O_WRONLY| O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
     }
     this -> Left -> execute(status,pipes,In,true,size);
+    close(pipes[1]);
     if (Out){
         pipes[1] = passInPipe;
         this -> Left -> execute(status,pipes,In,true,size);

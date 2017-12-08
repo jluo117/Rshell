@@ -31,42 +31,21 @@ void ReDirect::execute(int &status,int pipes[],bool In,bool Out,int &size){
         status = -1;
         return;
     }
-    int tempPipe [2];
-
-    if (pipe(tempPipe) == -1){
-            perror("pipe");
-            status = -1;
-            return;
-    }
-    int curSize = size;
-    this -> Left -> execute(status,tempPipe,false,true,size);
-
-    close(tempPipe[1]);
-    if (status == -1){
-        return;
-    }
-    if (Out){
-        close(STDIN_FILENO);
-        close(STDOUT_FILENO);
-        size += 2;
-        pipes[1] = tempPipe[0];
-        this -> Right -> execute(status,pipes,true,true,size);
-        int newPipe[20];
-        for (int i = 0; i < curSize; i++){
-            newPipe[i] = pipes[i];
-        }
-        for (int i = curSize; i < size; i++){
-            newPipe[i] = tempPipe[i];
-        }
-        pipes = newPipe;
-    }
-    else{
-        this -> Right -> execute(status,tempPipe,true,Out,size);
-    }
-    close(tempPipe[0]);
-    if (status == -1){
-        return;
-    }
+    int write[2];
+    int read[2];
+    pipe(write);
+    dup2(size, 0);
+    dup2(write[1], 1);
+    close(write[0]);
+    this -> Left -> execute(status,write,In,true,size);
+    close(write[1]);
+    dup2(write[1],size);
+    pipe(read);
+    dup2(read[1], 1);
+    close(read[0]);
+    this -> Right -> execute(status,read,true,Out,size);
+    close(read[1]);
+    size = read[0];
 }
 
 

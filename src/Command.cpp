@@ -72,13 +72,10 @@ void Command::execute(int &status,int pipes[],bool In, bool Out, int &size){
     int pid = fork();
 	//child fuction is running
     if (pid == 0){
-        if (In){
-            close(STDIN_FILENO);
-            dup2(pipes[0],0);
-        }
-        if (Out){
-            dup2(pipes[1],STDOUT_FILENO);
-        }
+       // if (In || Out){
+         //   dup2(pipes[1],1);
+           // dup2(pipes[0],0);
+      //  }
 		status=execvp(this-> Args[0],this -> Args);
         perror("execvp");
         exit(status);
