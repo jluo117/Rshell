@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <cerrno>
 #include <fcntl.h>
+#include <stack>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -80,4 +81,13 @@ void PipeIn::execute(int &status,int pipes[],bool In, bool Out, int &size){
                 return;
         }
     }
+}
+void PipeIn::toStack(std::stack <Base*> &stacker){
+    stacker.push(this);
+}
+void PipeIn::execute(){
+    int stat;
+    stat = open(this -> fileName.c_str(), O_RDONLY);
+    dup(stat);
+    this -> Left -> execute();
 }

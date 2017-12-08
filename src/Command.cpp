@@ -9,6 +9,7 @@
 #include<fstream>
 #include <iostream>
 #include <stdio.h>
+#include <stack>
 #include <string.h>
 #include "Command.h"
 #include <unistd.h>
@@ -72,10 +73,10 @@ void Command::execute(int &status,int pipes[],bool In, bool Out, int &size){
     int pid = fork();
 	//child fuction is running
     if (pid == 0){
-       // if (In || Out){
-         //   dup2(pipes[1],1);
-           // dup2(pipes[0],0);
-      //  }
+        if (In || Out){
+            dup2(pipes[1],1);
+            dup2(pipes[0],0);
+        }
 		status=execvp(this-> Args[0],this -> Args);
         perror("execvp");
         exit(status);
@@ -148,6 +149,12 @@ bool Command::test(){
         std::cout << "Invalid command " << std::endl;
     }
     return false;
+}
+void Command::toStack(std::stack <Base*> &stacker){
+    stacker.push(this);
+}
+void Command::execute(){
+    execvp(this-> Args[0],this -> Args);
 }
 //connection only function
 void Command::add_left(Base* none){

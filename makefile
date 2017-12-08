@@ -6,7 +6,7 @@ all:rshell
 	mv $(EXEC) $(FINEXEC)
 
 rshell:
-	g++ $(CFLAGS) src/*.cpp -o $(EXEC)
+	g++ $(CFLAGS) src/*.cpp -o  $(EXEC)
 
 clean:
 	rm -r -f bin

@@ -1,4 +1,5 @@
 #include "PipeOut.h"
+#include <stack>
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -54,5 +55,25 @@ void PipeOut::execute(int &status,int pipes[],bool In,bool Out, int &size){
         this -> Left -> execute(status,pipes,In,true,size);
     }
 }
+void PipeOut::toStack(std::stack <Base*> &stacker){
+    stacker.push(this);
+}
+
+void PipeOut::execute(){
+    int status = 0;
+    int size = 0;
+    int passInPipe[2];
+    pipe(passInPipe);
+    if (this -> append){
+            passInPipe[1] = open(this -> fileName.c_str(),O_WRONLY| O_APPEND | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+        }
+    else{
+            passInPipe[1] = open(this -> fileName.c_str(),O_WRONLY| O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+    }
+    passInPipe[0] = this -> backPipe[1];
+    this -> Left -> execute(status,passInPipe,true,true,size);
+    this -> Left -> execute();
+}
+
 
 

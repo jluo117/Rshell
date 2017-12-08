@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <stack>
 #include <vector>
 #include <fcntl.h>
 ReDirect::ReDirect(){
@@ -31,23 +32,45 @@ void ReDirect::execute(int &status,int pipes[],bool In,bool Out,int &size){
         status = -1;
         return;
     }
-    int write[2];
-    int read[2];
-    pipe(write);
-    dup2(size, 0);
-    dup2(write[1], 1);
-    close(write[0]);
-    this -> Left -> execute(status,write,In,true,size);
-    close(write[1]);
-    dup2(write[1],size);
-    pipe(read);
-    dup2(read[1], 1);
-    close(read[0]);
-    this -> Right -> execute(status,read,true,Out,size);
-    close(read[1]);
-    size = read[0];
+    int newPipe[2];
+    int fd_in = 0;
+    std::stack <Base*> master;
+    this -> Right -> toStack(master);
+    this -> Left -> toStack(master);
+    pid_t pid;
+    while (!master.empty()){
+        pipe(newPipe);
+        if ((pid = fork()) == -1){
+            exit(EXIT_FAILURE);
+        }
+        else if (pid == 0)
+        {
+          dup2(fd_in, 0); //change the input according to the old one
+          if (master.size() > 1)
+            dup2(newPipe[1], 1);
+          close(newPipe[0]);
+          master.top() -> backPipe[0] = newPipe[0];
+          master.top() -> backPipe[1] = newPipe[1];
+          master.top() -> execute();
+          exit(EXIT_FAILURE);
+        }
+        else{
+          wait(NULL);
+          close(newPipe[1]);
+          fd_in = newPipe[0]; //save the input for the next command
+          master.pop();
+        }
+    }
 }
 
+void ReDirect::toStack(std::stack <Base*> &stacker){
+    this -> Right -> toStack(stacker);
+    this -> Left -> toStack(stacker);
+}
+
+void ReDirect::execute(){
+//🙄
+}
 
 
 

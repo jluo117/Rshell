@@ -362,7 +362,15 @@ void CommandList::execute(int &flag,int pipes[],bool In,bool Out,int &size){
     }
     for (unsigned i = 0; i< this -> Actions.size(); i++){
         size = 0;
-        this -> Actions.at(i) -> execute(flag,pipes,false,false,size);
+        this -> Actions.at(i) -> execute(flag,pipes,In,Out,size);
+    }
+}
+void CommandList::toStack(std::stack <Base*> &stacker){
+    stacker.push(this);
+}
+void CommandList::execute(){
+     for (unsigned i = 0; i< this -> Actions.size(); i++){
+            this -> Actions.at(i) -> execute();
     }
 }
 //junk functions
