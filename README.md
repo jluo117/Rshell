@@ -17,16 +17,16 @@ Input Redirection <
 * allows input to come from files
 
 Output redirection > and >>  
-* > and >> redirect the output to a file  
+* redirect the output to a file  
 * creates file if it doesn't exist, otherwise overwrites (>) or appends (>>) the file  
 
 Piping |
-* | allows for chaining of processes and commands  
+* allows for chaining of processes and commands  
 * sends output of one process or command as input to the next
 
 ### Current Bugs  
 * For output redirection, our program acts like Zshell if there isn't a pipe
-* > and >> redirect outputs to files in between > or >> when they should only direct it to the last file  
+* The > and >> redirect outputs to files in between > or >> when they should only direct it to the last file  
 In this example, the output of echo hello should only be written to file3:  
 
 ``` javascript
