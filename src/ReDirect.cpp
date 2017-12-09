@@ -48,9 +48,8 @@ void ReDirect::execute(int &status,int pipes[],bool In,bool Out,int &size){
                 master.pop();
             }
             else{
-
+                master.top() -> inDir = fd_in;
                 master.top() -> execute();
-                dup2(fd_in,master.top() -> inDir);
                 master.pop();
             }
             continue;

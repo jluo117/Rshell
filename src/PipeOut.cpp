@@ -57,18 +57,32 @@ void PipeOut::execute(int &status,int pipes[],bool In,bool Out, int &size){
 }
 void PipeOut::toStack(std::stack <Base*> &stacker){
     stacker.push(this);
-    this -> Left -> toStack(stacker);
 }
 
 void PipeOut::execute(){
-    int data;
+    int pid;
+    int newPipe[2];
+    pipe(newPipe);
     if (this -> append){
-        data = open(this -> fileName.c_str(),O_WRONLY| O_APPEND | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+            newPipe[1] = open(this -> fileName.c_str(),O_WRONLY| O_APPEND | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+        }
+    else{
+            newPipe[1] = open(this -> fileName.c_str(),O_WRONLY| O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+    }
+    if((pid = fork()) == -1){
+        exit(EXIT_FAILURE);
+    }
+    else if (pid == 0){
+        dup2(this -> inDir,0);
+        dup2(newPipe[1],1);
+        close(newPipe[0]);
+        this -> Left -> execute();
+        exit(EXIT_FAILURE);
     }
     else{
-        data = open(this -> fileName.c_str(),O_WRONLY| O_TRUNC | O_CREAT, S_IRUSR | S_IRGRP | S_IWGRP | S_IWUSR);
+        wait(NULL);
+        close(newPipe[1]);
     }
-    this -> inDir = data;
 }
 
 
