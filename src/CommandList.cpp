@@ -30,6 +30,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
                 quotes += " " + recived;
                 passInArg.push_back(quotes);
                 quotes = "";
+                continue;
             }
             else{
                 unsigned endLoc;
