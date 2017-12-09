@@ -40,22 +40,25 @@ void ReDirect::execute(int &status,int pipes[],bool In,bool Out,int &size){
     pid_t pid;
     while (!master.empty()){
         if (master.top() -> IsSpecial){
+            pipe(newPipe);
             master.top() -> inDir = fd_in;
-            master.top() -> execute();
             if (master.top() -> Double){
-                fd_in = master.top() -> outDir;
+                master.top() -> execute(status,newPipe,false,true,size);
+                close(newPipe[1]);
+                fd_in = newPipe[0];
+                master.pop();
             }
             else{
+                dup2(newPipe[1],1);
+                close(newPipe[1]);
+                master.top() -> execute();
                 Base *replaceTop = master.top() -> Left;
                 master.pop();
-                pipe(newPipe);
                 if ((pid = fork()) == -1){
                     exit(EXIT_FAILURE);
                 }
                 else if (pid == 0){
                     dup2(fd_in,0);
-                    dup2(newPipe[1],1);
-                    close(newPipe[0]);
                     replaceTop -> execute();
                     exit(EXIT_FAILURE);
                 }

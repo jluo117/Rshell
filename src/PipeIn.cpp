@@ -102,7 +102,7 @@ void PipeIn::execute(){
             return;
         }
         else if(pid == 0) {
-            newPipe[1] = open(this -> fileName.c_str(), O_RDONLY);
+            status = open(this -> fileName.c_str(), O_RDONLY);
             if(status == -1) {
                 status = -1;
                 perror("open");
@@ -115,22 +115,23 @@ void PipeIn::execute(){
                 exit(1);
                 return;
             }
-            if(dup(newPipe[1]) == -1) {
+            if(dup(status) == -1) {
                 status = -1;
                 perror("dup");
                 exit(1);
                 return;
             }
-            close(newPipe[0]);
             this -> Left -> execute(status,newPipe,true,true,size);
-            this -> outDir = newPipe[0];
             exit(0);
         }
         else {
-            if(wait(&status) == -1)
+              if(wait(&status) == -1){
                 perror("wait");
                 return;
+            }
         }
+    this -> outDir = newPipe[1];
+
 }
 
 
