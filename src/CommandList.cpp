@@ -30,6 +30,7 @@ CommandList::CommandList(std::vector<std::string> &inputSplit, unsigned &cur,int
                 quotes += " " + recived;
                 passInArg.push_back(quotes);
                 quotes = "";
+                continue;
             }
             else{
                 unsigned endLoc;
@@ -356,12 +357,21 @@ Base* CommandList::build(Base* left, Base* right){
     left ->add_right(right);
         return left;
 }
-void CommandList::execute(int &flag,int pipes[],bool In,bool Out){
+void CommandList::execute(int &flag,int pipes[],bool In,bool Out,int &size){
     if (flag == -1){
         return;
     }
     for (unsigned i = 0; i< this -> Actions.size(); i++){
-        this -> Actions.at(i) -> execute(flag,pipes,false,false);
+        size = 0;
+        this -> Actions.at(i) -> execute(flag,pipes,In,Out,size);
+    }
+}
+void CommandList::toStack(std::stack <Base*> &stacker){
+    stacker.push(this);
+}
+void CommandList::execute(){
+     for (unsigned i = 0; i< this -> Actions.size(); i++){
+            this -> Actions.at(i) -> execute();
     }
 }
 //junk functions

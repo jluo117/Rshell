@@ -1,5 +1,6 @@
 #ifndef OR_H
 #define OR_H
+#include <stack>
 #include "Connector.h"
 class Or: public Connector{
     public:
@@ -9,7 +10,9 @@ class Or: public Connector{
         void fetch_name ();
         void add_right(Base *right);
         void add_left(Base *left);
-        void  execute(int &status,int pipes[],bool In,bool Out);
+        void execute();
+        void  execute(int &status,int pipes[],bool In,bool Out, int &size);
+        void toStack(std::stack <Base*> &stacker);
 };
 
 #endif

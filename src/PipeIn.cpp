@@ -4,6 +4,7 @@
 #include <sys/stat.h>
 #include <cerrno>
 #include <fcntl.h>
+#include <stack>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
@@ -30,15 +31,17 @@ void PipeIn::add_right(Base *right){
 void PipeIn::fetch_name(){
     std::cout << "parsing error near < " << std::endl;
 }
-void PipeIn::execute(int &status,int pipes[],bool In, bool Out){
-    
+void PipeIn::execute(int &status,int pipes[],bool In, bool Out, int &size){
+    if (size == 0){
+        size = 2;
+    }
     if (!this -> Left){
         std::cout << "missing left params" << std::endl;
         status = -1;
         return;
     }
     if (this -> Left -> Double){
-        this -> Left -> execute(status,pipes,In,Out);
+        this -> Left -> execute(status,pipes,In,Out,size);
     }
     else{
         int pid = fork();
@@ -69,7 +72,7 @@ void PipeIn::execute(int &status,int pipes[],bool In, bool Out){
                 exit(1);
                 return;
             }
-            this -> Left -> execute(status,pipes,In,Out);
+            this -> Left -> execute(status,pipes,In,Out,size);
             exit(0);
         }
         else {
@@ -79,3 +82,56 @@ void PipeIn::execute(int &status,int pipes[],bool In, bool Out){
         }
     }
 }
+void PipeIn::toStack(std::stack <Base*> &stacker){
+    stacker.push(this);
+}
+void PipeIn::execute(){
+    int status = 0;
+    int size = 0;
+    int newPipe[2];
+    int file = open (this -> fileName.c_str(), O_RDONLY);
+    if (file == -1){
+        return;
+    }
+    int pid = fork();
+
+        if(pid == -1) {
+            status = -1;
+            perror("fork");
+            exit(1);
+            return;
+        }
+        else if(pid == 0) {
+            status = open(this -> fileName.c_str(), O_RDONLY);
+            if(status == -1) {
+                status = -1;
+                perror("open");
+                exit(1);
+                return;
+            }
+            if(close(0)) {
+                status = -1;
+                perror("close");
+                exit(1);
+                return;
+            }
+            if(dup(status) == -1) {
+                status = -1;
+                perror("dup");
+                exit(1);
+                return;
+            }
+            this -> Left -> execute(status,newPipe,true,true,size);
+            exit(0);
+        }
+        else {
+              if(wait(&status) == -1){
+                perror("wait");
+                return;
+            }
+        }
+    this -> outDir = newPipe[1];
+
+}
+
+

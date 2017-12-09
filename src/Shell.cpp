@@ -121,7 +121,8 @@ void Shell::runShell(){
     }
     for (unsigned i = 0; i < userInputs.size(); i++){
         int pipes [2];
-        userInputs.at(i) -> execute(flag,pipes,false,false);
+        int size = 0;
+        userInputs.at(i) -> execute(flag,pipes,false,false,size);
     }
     }
 }

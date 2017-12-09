@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <stack>
 #include<sys/types.h>
 #include "Base.h"
 class Command: public Base{
@@ -14,8 +15,10 @@ class Command: public Base{
     int toBlowUp; //check amount of deletes we need
     std::string storeData;
     public:
+        void toStack(std::stack <Base*> &stacker);
         Command(std::vector<std::string> userEnter);
-        void execute(int &status,int pipes[],bool In,bool Out);
+        void execute(int &status,int pipes[],bool In,bool Out, int &size);
+        void execute();
     private:
         bool isDir(char *fileName);
         bool isFile(char *fileName);
