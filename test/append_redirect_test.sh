@@ -1,7 +1,6 @@
 #tests for >>
 echo water >> elements
-echo ""
-echo fire >> elements >> hotStuff #fire written to hotStuff, not elements
+echo fire >> elements >> hotStuff #fire written to hotStuff, not elements (FAIL)
 cat hotStuff
 echo sun >> elements >> hotStuff #sun added to hotStuff
 cat hotStuff
