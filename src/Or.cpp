@@ -42,3 +42,10 @@ void Or::execute(int &status,int pipes[],bool In, bool Out, int &size){
         status = 0;
         return;
 }
+void Or::toStack(std::stack <Base*> &stacker){
+    stacker.push(this);
+}
+void Or::execute(){
+    this -> Left -> execute();
+    this -> Right -> execute();
+}

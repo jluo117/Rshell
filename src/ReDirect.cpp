@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <stack>
 #include <vector>
 #include <fcntl.h>
 ReDirect::ReDirect(){
@@ -31,44 +32,59 @@ void ReDirect::execute(int &status,int pipes[],bool In,bool Out,int &size){
         status = -1;
         return;
     }
-    int tempPipe [2];
-
-    if (pipe(tempPipe) == -1){
-            perror("pipe");
-            status = -1;
-            return;
-    }
-    int curSize = size;
-    this -> Left -> execute(status,tempPipe,false,true,size);
-
-    close(tempPipe[1]);
-    if (status == -1){
-        return;
-    }
-    if (Out){
-        close(STDIN_FILENO);
-        close(STDOUT_FILENO);
-        size += 2;
-        pipes[1] = tempPipe[0];
-        this -> Right -> execute(status,pipes,true,true,size);
-        int newPipe[20];
-        for (int i = 0; i < curSize; i++){
-            newPipe[i] = pipes[i];
+    int newPipe[2];
+    int fd_in = 0;
+    std::stack <Base*> master;
+    this -> Right -> toStack(master);
+    this -> Left -> toStack(master);
+    pid_t pid;
+    while (!master.empty()){
+        if (master.top() -> IsSpecial){
+            pipe(newPipe);
+            if (master.top() -> Double){
+                master.top() -> execute(status,newPipe,false,true,size);
+                close(newPipe[1]);
+                fd_in = newPipe[0];
+                master.pop();
+            }
+            else{
+                master.top() -> inDir = fd_in;
+                master.top() -> execute();
+                master.pop();
+            }
+            continue;
         }
-        for (int i = curSize; i < size; i++){
-            newPipe[i] = tempPipe[i];
+
+        pipe(newPipe);
+        if ((pid = fork()) == -1){
+            exit(EXIT_FAILURE);
         }
-        pipes = newPipe;
-    }
-    else{
-        this -> Right -> execute(status,tempPipe,true,Out,size);
-    }
-    close(tempPipe[0]);
-    if (status == -1){
-        return;
+        else if (pid == 0)
+        {
+          dup2(fd_in, 0); //change the input according to the old one
+          if (master.size() > 1)
+            dup2(newPipe[1], 1);
+          close(newPipe[0]);
+          master.top() -> execute();
+          exit(EXIT_FAILURE);
+        }
+        else{
+          wait(NULL);
+          close(newPipe[1]);
+          fd_in = newPipe[0]; //save the input for the next command
+          master.pop();
+        }
     }
 }
 
+void ReDirect::toStack(std::stack <Base*> &stacker){
+    this -> Right -> toStack(stacker);
+    this -> Left -> toStack(stacker);
+}
+
+void ReDirect::execute(){
+//🙄
+}
 
 
 

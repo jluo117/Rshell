@@ -46,4 +46,17 @@ void And::execute(int &status,int pipes[],bool In,bool Out, int &size){
         status = 0;
         return;
 }
-
+void And::toStack(std::stack <Base*> &stacker){
+    stacker.push(this);
+}
+void And::execute(){
+    if ((this -> Right == 0) || (this -> Left == 0)){
+        std::cout << "missing arguemnet" << std::endl;
+        return;
+    }
+        this -> Left -> execute();
+        perror("execvp");
+        this -> Right -> execute();
+        perror("execvp");
+        return;
+}
